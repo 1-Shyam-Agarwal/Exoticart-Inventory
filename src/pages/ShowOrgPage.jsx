@@ -1,7 +1,7 @@
 import AppHeader from '../components/molecules/showOrganisation/AppHeader';
 import { WelcomeSection } from '../components/molecules/showOrganisation/WelcomeSection';
 import { CreateOrganizationCard } from '../components/molecules/showOrganisation/CreateOrgCard';
-import { SampleAppsSection } from '../components/organisms/SampleAppSection';
+import { SampleAppsSection } from '../components/organisms/showOrganisation/SampleAppSection';
 
 function ShowOrgPage() {
     return (

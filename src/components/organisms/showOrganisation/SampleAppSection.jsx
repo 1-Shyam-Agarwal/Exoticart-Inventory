@@ -3,7 +3,7 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import GridOnOutlinedIcon from '@mui/icons-material/GridOnOutlined';
 import AutoAwesomeOutlinedIcon from '@mui/icons-material/AutoAwesomeOutlined';
-import { SampleAppCard } from '../molecules/showOrganisation/SampleAppCard';
+import { SampleAppCard } from '../../molecules/showOrganisation/SampleAppCard';
 
 export function SampleAppsSection() {
   return (
