@@ -1,6 +1,6 @@
 import AppBar from '@mui/material/AppBar';
 import Typography from '@mui/material/Typography';
-import logo from '../../../public/assets/company_logo.png';
+import logo from '../../../../public/assets/company_logo.png';
 import Stack from '@mui/material/Stack';
 import Container from '@mui/material/Container';
 import DarkModeOutlinedIcon from '@mui/icons-material/DarkModeOutlined';
