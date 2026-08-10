@@ -1,9 +1,9 @@
-
+import ShowOrgPage from './pages/ShowOrgPage';
 function App() {
 
   return (
     <>
-      Krishna
+      <ShowOrgPage />
     </>
   )
 }
