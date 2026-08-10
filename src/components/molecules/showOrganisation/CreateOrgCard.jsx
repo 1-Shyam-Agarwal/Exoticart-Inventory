@@ -2,9 +2,12 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
+import { useNavigate } from 'react-router-dom';
 import developerLogo from '../../../../public/assets/developer_logo.png';
 
 export function CreateOrganizationCard() {
+  const navigate = useNavigate();
+
   return (
     <Box sx={{ mt: 0.5, mx: 2.5 }}>
       <Typography
@@ -18,6 +21,7 @@ export function CreateOrganizationCard() {
         type="button"
         variant="outlined"
         fullWidth
+        onClick={() => navigate('/setup-org')}
         sx={{
           p: 2.5,
           textTransform: 'none',
@@ -44,7 +48,7 @@ export function CreateOrganizationCard() {
             sx={{ width: 56, height: 56, objectFit: 'contain' }}
           />
 
-          <Stack spacing={0.5} sx={{ alignItems: 'flex-start'}}>
+          <Stack spacing={0.5} sx={{ alignItems: 'flex-start' }}>
             <Typography variant="body1" sx={{ fontWeight: 400, color: 'text.primary' }}>
               Set up your organization
             </Typography>
