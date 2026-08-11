@@ -1,6 +1,7 @@
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import AppHeader from '../components/molecules/showOrganisation/AppHeader';
+import MultiStepForm from '../components/organisms/setupOrganisation/MultiStepForm';
 
 function SetupOrgPage() {
   return (
@@ -13,6 +14,7 @@ function SetupOrgPage() {
       }}
     >
       <AppHeader />
+      <MultiStepForm />
       <Box sx={{ p: 4 }}>
         <Typography variant="h5" sx={{ fontWeight: 500, color: 'text.primary' }}>
           Set up your organization
