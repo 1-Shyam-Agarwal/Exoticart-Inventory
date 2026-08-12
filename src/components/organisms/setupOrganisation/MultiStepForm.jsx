@@ -1,45 +1,77 @@
-import { useEffect } from "react"
-import { useForm } from "react-hook-form"
+import { FormProvider } from "react-hook-form"
+import Button from "@mui/material/Button"
+import Stack from "@mui/material/Stack"
 import { useMultiStepForm } from "../../../hooks/useMultiStepForm"
-import ProgressSteps from "./ProgressSteps"
+import ProgressBar from "../../molecules/setupOrganisation/ProgressBar"
+import StepOrganizationIdentity from "../../molecules/setupOrganisation/StepOrganizationIdentity"
+import StepOwnerDetails from "../../molecules/setupOrganisation/StepOwnerDetails"
+import StepLocation from "../../molecules/setupOrganisation/StepLocation"
+import StepBusinessDetails from "../../molecules/setupOrganisation/StepBusinessDetails"
+import StepBankDetails from "../../molecules/setupOrganisation/StepBankDetails"
 
 function MultiStepForm() {
+  const form = useMultiStepForm()
   const {
     currentStep,
-    formData,
+    steps,
     isFirstStep,
     isLastStep,
-    isSubmitted,
-    steps,
+    isSubmitting,
     goToNextStep,
     goToPreviousStep,
-    submitForm,
-    resetForm,
-    updateFormData,
-  } = useMultiStepForm()
-
-  const {
-    register,
     handleSubmit,
-    formState: { errors },
-    trigger,
-    setValue,
-    reset,
-  } = useForm({
-    mode: "onChange",
-  })
-
-  useEffect(() => {
-    if (isSubmitted) {
-      submitForm(formData)
-    }
-  }, [currentStep, formData, reset])
+    submitForm,
+  } = form
 
   return (
-    <div >
-      <ProgressSteps currentStep={currentStep} steps={steps} />
-      <h1>Multi Step Form</h1>
-    </div>
+    <FormProvider {...form}>
+      <form onSubmit={handleSubmit(submitForm)}>
+        <Stack direction="row" spacing={3} sx={{ p: 3, alignItems: "flex-start" }}>
+          <ProgressBar currentStep={currentStep} steps={steps} />
+
+          <Stack spacing={3} sx={{ flex: 1, maxWidth: 480 }}>
+            {currentStep === 0 && <StepOrganizationIdentity />}
+            {currentStep === 1 && <StepOwnerDetails />}
+            {currentStep === 2 && <StepLocation />}
+            {currentStep === 3 && <StepBusinessDetails />}
+            {currentStep === 4 && <StepBankDetails />}
+
+            <Stack direction="row" spacing={1.5} justifyContent="flex-end">
+              {!isFirstStep ? (
+                <Button
+                  type="button"
+                  variant="outlined"
+                  onClick={goToPreviousStep}
+                  sx={{ textTransform: "none" }}
+                >
+                  Back
+                </Button>
+              ) : null}
+
+              {isLastStep ? (
+                <Button
+                  type="submit"
+                  variant="contained"
+                  disabled={isSubmitting}
+                  sx={{ textTransform: "none" }}
+                >
+                  Submit
+                </Button>
+              ) : (
+                <Button
+                  type="button"
+                  variant="contained"
+                  onClick={goToNextStep}
+                  sx={{ textTransform: "none" }}
+                >
+                  Next
+                </Button>
+              )}
+            </Stack>
+          </Stack>
+        </Stack>
+      </form>
+    </FormProvider>
   )
 }
 
