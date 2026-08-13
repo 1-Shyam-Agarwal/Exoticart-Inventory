@@ -2,9 +2,9 @@ import Box from "@mui/material/Box"
 import Button from "@mui/material/Button"
 import Stack from "@mui/material/Stack"
 import Typography from "@mui/material/Typography"
-import { linkButtonSx } from "./fieldStyles"
+import { linkButtonSx } from "./styles"
 
-export function ReviewSection({ title, rows, onEdit, extra }) {
+export default function ReviewSection({ title, rows, onEdit, extra }) {
   return (
     <Box
       component="section"

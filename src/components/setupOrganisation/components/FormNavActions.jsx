@@ -1,45 +1,7 @@
 import { useNavigate } from "react-router-dom"
 import Button from "@mui/material/Button"
 import Stack from "@mui/material/Stack"
-
-const ghostButtonSx = {
-  height: 40,
-  px: 2.5,
-  minWidth: 0,
-  borderRadius: 9999,
-  textTransform: "none",
-  fontWeight: 500,
-  fontSize: "0.875rem",
-  color: "text.secondary",
-  boxShadow: "none",
-  "&:hover": {
-    bgcolor: "action.hover",
-    color: "text.primary",
-    boxShadow: "none",
-  },
-}
-
-const primaryButtonSx = {
-  height: 40,
-  px: 4,
-  borderRadius: 9999,
-  textTransform: "none",
-  fontWeight: 500,
-  fontSize: "0.875rem",
-  bgcolor: "primary.main",
-  color: "primary.contrastText",
-  boxShadow: "none",
-  "&:hover": {
-    bgcolor: "primary.main",
-    opacity: 0.8,
-    boxShadow: "none",
-  },
-  "&.Mui-disabled": {
-    opacity: 0.5,
-    color: "primary.contrastText",
-    bgcolor: "primary.main",
-  },
-}
+import { ghostButtonSx, primaryButtonSx } from "./styles"
 
 export default function FormNavActions({
   isFirstStep,

@@ -1,7 +1,6 @@
-import MultiStepForm from '../components/organisms/setupOrganisation/MultiStepForm';
+import SetupOrganisation from "../components/setupOrganisation/SetupOrganisation"
 
-function SetupOrgPage() {
-  return <MultiStepForm />;
+/** Thin page shell — mirrors MUI checkout template page composition */
+export default function SetupOrgPage() {
+  return <SetupOrganisation />
 }
-
-export default SetupOrgPage;

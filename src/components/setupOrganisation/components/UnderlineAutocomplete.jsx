@@ -1,12 +1,10 @@
 import { Controller } from "react-hook-form"
 import Autocomplete from "@mui/material/Autocomplete"
-import Box from "@mui/material/Box"
 import TextField from "@mui/material/TextField"
-import { FieldError } from "./FieldError"
-import { FieldLabel } from "./FieldLabel"
-import { autocompletePaperSx, underlineFieldSx } from "./fieldStyles"
+import FormField from "./FormField"
+import { autocompletePaperSx, underlineFieldSx } from "./styles"
 
-export function UnderlineAutocomplete({
+export default function UnderlineAutocomplete({
   name,
   control,
   errors,
@@ -21,10 +19,12 @@ export function UnderlineAutocomplete({
   onChangeExtra,
 }) {
   return (
-    <Box>
-      <FieldLabel htmlFor={htmlFor} required={required}>
-        {label}
-      </FieldLabel>
+    <FormField
+      htmlFor={htmlFor}
+      label={label}
+      required={required}
+      error={errors?.[name]?.message}
+    >
       <Controller
         name={name}
         control={control}
@@ -61,7 +61,6 @@ export function UnderlineAutocomplete({
           />
         )}
       />
-      <FieldError message={errors?.[name]?.message} />
-    </Box>
+    </FormField>
   )
 }
