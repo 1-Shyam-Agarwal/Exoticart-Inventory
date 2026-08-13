@@ -9,11 +9,17 @@ import Button from '@mui/material/Button';
 
 function AppHeader() {
     return (
-        <AppBar position="static" sx={{ 
-            boxShadow:0 ,
-            backgroundColor: 'background.main',
-            padding: '0.8rem',
-        }}>
+        <AppBar
+            position="static"
+            color="transparent"
+            elevation={0}
+            sx={{
+                bgcolor: "background.main",
+                backgroundImage: "none",
+                boxShadow: "none",
+                padding: "0.8rem",
+            }}
+        >
             <Stack 
                 direction="row" 
                 spacing={1}
@@ -43,7 +49,7 @@ function AppHeader() {
                 </Container>
 
                 <Button variant="text" >
-                        <DarkModeOutlinedIcon sx={{ color: 'black' , fontSize: '1.5rem'}} />
+                        <DarkModeOutlinedIcon sx={{ color: 'text.primary' , fontSize: '1.5rem'}} />
                 </Button>
             </Stack>
         </AppBar>

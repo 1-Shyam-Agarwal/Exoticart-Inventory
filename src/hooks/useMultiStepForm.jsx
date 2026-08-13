@@ -1,11 +1,19 @@
-import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { useMemo, useState } from "react"
+import { useForm } from "react-hook-form"
 
-import BusinessIcon from "@mui/icons-material/Business";
-import PersonIcon from "@mui/icons-material/Person";
-import LocationOnIcon from "@mui/icons-material/LocationOn";
-import WorkHistoryIcon from "@mui/icons-material/WorkHistory";
-import AccountBalanceIcon from "@mui/icons-material/AccountBalance";
+import BusinessIcon from "@mui/icons-material/Business"
+import PersonIcon from "@mui/icons-material/Person"
+import LocationOnIcon from "@mui/icons-material/LocationOn"
+import WorkHistoryIcon from "@mui/icons-material/WorkHistory"
+import AccountBalanceIcon from "@mui/icons-material/AccountBalance"
+
+import {
+  organizationIdentitySchema,
+  ownerDetailsSchema,
+  locationSchema,
+  businessDetailsSchema,
+  bankDetailsSchema,
+} from "../validation/schema"
 
 export const steps = [
   {
@@ -33,21 +41,51 @@ export const steps = [
     title: "Bank Details",
     icon: <AccountBalanceIcon />,
   },
-];
+]
+
+const STEP_FIELDS = [
+  ["name", "industry", "logoFile"],
+  ["ownerName", "countryCode", "mobileNumber", "email"],
+  [
+    "country",
+    "state",
+    "currency",
+    "timezone",
+    "street1",
+    "street2",
+    "city",
+    "postalCode",
+  ],
+  ["inventoryStartDate", "fiscalYear", "pan", "gst"],
+  [
+    "accountHolderName",
+    "bankName",
+    "accountNumber",
+    "ifscCode",
+    "accountType",
+    "upiId",
+    "qrFile",
+  ],
+]
+
+const stepSchemas = [
+  organizationIdentitySchema,
+  ownerDetailsSchema,
+  locationSchema,
+  businessDetailsSchema,
+  bankDetailsSchema,
+]
 
 const defaultValues = {
-  // Step 1 — organizationIdentitySchema
   name: "",
   industry: "",
   logoFile: undefined,
 
-  // Step 2 — ownerDetailsSchema
   ownerName: "",
   countryCode: "",
   mobileNumber: "",
   email: "",
 
-  // Step 3 — locationSchema
   country: "",
   state: "",
   currency: "",
@@ -57,13 +95,11 @@ const defaultValues = {
   city: "",
   postalCode: "",
 
-  // Step 4 — businessDetailsSchema
   inventoryStartDate: undefined,
   fiscalYear: "",
   pan: "",
   gst: "",
 
-  // Step 5 — bankDetailsSchema
   accountHolderName: "",
   bankName: "",
   accountNumber: "",
@@ -71,119 +107,141 @@ const defaultValues = {
   accountType: "",
   upiId: "",
   qrFile: undefined,
-};
+}
+
+function pickStepValues(stepIndex, values) {
+  return Object.fromEntries(
+    STEP_FIELDS[stepIndex].map((field) => [field, values[field]]),
+  )
+}
+
+function applyStepErrors(setError, clearErrors, stepIndex, result) {
+  clearErrors(STEP_FIELDS[stepIndex])
+
+  if (result.success) return
+
+  for (const issue of result.error.issues) {
+    const field = issue.path[0]
+    if (field == null) continue
+    setError(String(field), {
+      type: "validation",
+      message: issue.message,
+    })
+  }
+}
+
+function validateStep(stepIndex, values, setError, clearErrors) {
+  const result = stepSchemas[stepIndex].safeParse(
+    pickStepValues(stepIndex, values),
+  )
+
+  applyStepErrors(setError, clearErrors, stepIndex, result)
+
+  return result
+}
 
 export function useMultiStepForm() {
-  const [currentStep, setCurrentStep] = useState(0);
-  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [currentStep, setCurrentStep] = useState(0)
+  const [isSubmitted, setIsSubmitted] = useState(false)
 
   const form = useForm({
     defaultValues,
-    mode: "onTouched",
-  });
+    mode: "onChange",
+    reValidateMode: "onChange",
+  })
 
   const {
     trigger,
     handleSubmit,
     reset,
     getValues,
-    formState: {
-      errors,
-      isSubmitting,
-    },
-  } = form;
+    setError,
+    clearErrors,
+    watch,
+    formState: { errors, isSubmitting },
+  } = form
 
-  const isFirstStep = currentStep === 0;
-  const isLastStep = currentStep === steps.length - 1;
+  const watchedValues = watch()
+
+  const isFirstStep = currentStep === 0
+  const isLastStep = currentStep === steps.length - 1
+
+  const canContinue = useMemo(() => {
+    return stepSchemas[currentStep].safeParse(
+      pickStepValues(currentStep, watchedValues),
+    ).success
+  }, [currentStep, watchedValues])
 
   const goToNextStep = () => {
-    if (!isLastStep) {
-      setCurrentStep((prev) => prev + 1);
-    }
-  };
+    const result = validateStep(currentStep, getValues(), setError, clearErrors)
 
-  /**
-   * Move to previous step
-   */
+    if (!result.success || isLastStep) {
+      return
+    }
+
+    console.log("Form data:", getValues())
+    setCurrentStep((prev) => prev + 1)
+  }
+
   const goToPreviousStep = () => {
     if (!isFirstStep) {
-      setCurrentStep((prev) => prev - 1);
+      setCurrentStep((prev) => prev - 1)
     }
-  };
+  }
 
-  /**
-   * Go directly to a step
-   */
   const goToStep = (step) => {
-    if (step >= 0 && step < steps.length) {
-      setCurrentStep(step);
+    // Only allow going back to completed steps — future points stay disabled
+    if (step < 0 || step >= steps.length || step >= currentStep) {
+      return
     }
-  };
 
-  /**
-   * Final form submission
-   */
+    setCurrentStep(step)
+  }
+
   const submitForm = async (data) => {
-    try {
-      console.log("Form data:", data);
+    const result = validateStep(currentStep, data, setError, clearErrors)
 
-      // API call here
-      //
-      // const response = await fetch("/api/business", {
-      //   method: "POST",
-      //   headers: {
-      //     "Content-Type": "application/json",
-      //   },
-      //   body: JSON.stringify(data),
-      // });
-      //
-      // if (!response.ok) {
-      //   throw new Error("Something went wrong");
-      // }
-      console.log("Form data submitted:", data);
-      setIsSubmitted(true);
-    } catch (error) {
-      console.error("Submit error:", error);
+    if (!result.success) {
+      return
     }
-  };
 
-  /**
-   * Reset everything
-   */
+    try {
+      console.log("Form data submitted:", data)
+      setIsSubmitted(true)
+    } catch (error) {
+      console.error("Submit error:", error)
+    }
+  }
+
   const resetForm = () => {
-    reset(defaultValues);
-    setCurrentStep(0);
-    setIsSubmitted(false);
-  };
+    reset(defaultValues)
+    setCurrentStep(0)
+    setIsSubmitted(false)
+  }
 
   return {
-    // React Hook Form
     ...form,
 
-    // Current step
     currentStep,
     steps,
 
-    // Step state
     isFirstStep,
     isLastStep,
+    canContinue,
 
-    // Form state
     errors,
     isSubmitting,
     isSubmitted,
 
-    // Navigation
     goToNextStep,
     goToPreviousStep,
     goToStep,
 
-    // Submission
     submitForm,
     handleSubmit,
+    trigger,
 
-    // Utilities
     getValues,
     resetForm,
-  };
+  }
 }

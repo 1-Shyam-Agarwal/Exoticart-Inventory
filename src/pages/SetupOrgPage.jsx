@@ -4,16 +4,7 @@ import MultiStepForm from '../components/organisms/setupOrganisation/MultiStepFo
 
 function SetupOrgPage() {
   return (
-    <Box
-      sx={{
-        bgcolor: 'background.main',
-        minHeight: '100vh',
-        overflowY: 'auto',
-      }}
-    >
-      <AppHeader />
       <MultiStepForm />
-    </Box>
   );
 }
 

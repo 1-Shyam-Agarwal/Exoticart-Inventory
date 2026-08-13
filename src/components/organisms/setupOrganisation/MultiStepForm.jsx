@@ -1,8 +1,8 @@
 import { FormProvider } from "react-hook-form"
-import Button from "@mui/material/Button"
-import Stack from "@mui/material/Stack"
+import Box from "@mui/material/Box"
 import { useMultiStepForm } from "../../../hooks/useMultiStepForm"
-import ProgressBar from "../../molecules/setupOrganisation/ProgressBar"
+import ProgressBar from "./ProgressBar"
+import FormNavActions from "./FormNavActions"
 import StepOrganizationIdentity from "../../molecules/setupOrganisation/StepOrganizationIdentity"
 import StepOwnerDetails from "../../molecules/setupOrganisation/StepOwnerDetails"
 import StepLocation from "../../molecules/setupOrganisation/StepLocation"
@@ -17,6 +17,7 @@ function MultiStepForm() {
     isFirstStep,
     isLastStep,
     isSubmitting,
+    canContinue,
     goToNextStep,
     goToPreviousStep,
     handleSubmit,
@@ -25,52 +26,64 @@ function MultiStepForm() {
 
   return (
     <FormProvider {...form}>
-      <form onSubmit={handleSubmit(submitForm)}>
-        <Stack direction="row" spacing={3} sx={{ p: 3, alignItems: "flex-start" }}>
-          <ProgressBar currentStep={currentStep} steps={steps} />
+      <Box
+        component="form"
+        onSubmit={handleSubmit(submitForm)}
+        sx={{
+          width: "100%",
+          minHeight: "100vh",
+          bgcolor: "background.main",
+        }}
+      >
+        <Box
+          component="main"
+          sx={{
+            display: "flex",
+            width: "100%",
+            flexDirection: { xs: "column", lg: "row" },
+            alignItems: "flex-start",
+            gap: { xs: 5, lg: 10 },
+            px: { xs: 4, sm: 6, lg: 8 },
+            py: { xs: 4, lg: 5 },
+          }}
+        >
+          <Box
+            sx={{
+              flexShrink: 0,
+              height: "auto",
+              position: { lg: "sticky" },
+              top: { lg: 32 },
+            }}
+          >
+            <ProgressBar currentStep={currentStep} steps={steps} />
+          </Box>
 
-          <Stack spacing={3} sx={{ flex: 1, maxWidth: 480 }}>
+          <Box
+            component="section"
+            sx={{
+              minWidth: 0,
+              width: "100%",
+              maxWidth: "42rem",
+              flex: 1,
+            }}
+          >
             {currentStep === 0 && <StepOrganizationIdentity />}
             {currentStep === 1 && <StepOwnerDetails />}
             {currentStep === 2 && <StepLocation />}
             {currentStep === 3 && <StepBusinessDetails />}
             {currentStep === 4 && <StepBankDetails />}
 
-            <Stack direction="row" spacing={1.5} justifyContent="flex-end">
-              {!isFirstStep ? (
-                <Button
-                  type="button"
-                  variant="outlined"
-                  onClick={goToPreviousStep}
-                  sx={{ textTransform: "none" }}
-                >
-                  Back
-                </Button>
-              ) : null}
-
-              {isLastStep ? (
-                <Button
-                  type="submit"
-                  variant="contained"
-                  disabled={isSubmitting}
-                  sx={{ textTransform: "none" }}
-                >
-                  Submit
-                </Button>
-              ) : (
-                <Button
-                  type="button"
-                  variant="contained"
-                  onClick={goToNextStep}
-                  sx={{ textTransform: "none" }}
-                >
-                  Next
-                </Button>
-              )}
-            </Stack>
-          </Stack>
-        </Stack>
-      </form>
+            <FormNavActions
+              isFirstStep={isFirstStep}
+              isLastStep={isLastStep}
+              isSubmitting={isSubmitting}
+              canContinue={canContinue}
+              onBack={goToPreviousStep}
+              onContinue={goToNextStep}
+            />
+          </Box>
+        </Box>
+      </Box>
     </FormProvider>
   )
 }

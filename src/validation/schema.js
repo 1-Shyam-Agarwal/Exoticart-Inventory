@@ -15,7 +15,7 @@ export const organizationIdentitySchema = z.object({
   logoFile: z
     .file()
     .min(1000, "Logo file must be at least 1Kb")
-    .max(10_000, "Logo file must be 10Kb or less")
+    .max(10000000, "Logo file must be 10MB or less")
     .optional(),
 })
 
@@ -94,6 +94,6 @@ export const bankDetailsSchema = z.object({
   qrFile: z
     .file()
     .min(1000, "QR code file must be at least 1Kb")
-    .max(10_000, "QR code file must be 10Kb or less")
+    .max(10000000, "QR code file must be 10Mb or less")
     .optional(),
 })
