@@ -1,26 +1,55 @@
-import { useEffect } from "react"
 import { useFormContext } from "react-hook-form"
 import Box from "@mui/material/Box"
 import Typography from "@mui/material/Typography"
 import { LogoPreview } from "./ImagePreview"
 import { LogoUploadPlaceholder } from "./ImagePlaceholder"
 
-export function LogoUpload({ error }) {
-  const { setValue, watch } = useFormContext()
-  const logoFile = watch("logoFile")
-
-  function generatePreviewUrl(currentLogoFile) {
-    if (!(currentLogoFile instanceof File)) return null
-    return URL.createObjectURL(currentLogoFile)
-  }
-
-  const previewUrl = generatePreviewUrl(logoFile)
-
-  useEffect(() => {
-    return () => {
-      if (previewUrl) URL.revokeObjectURL(previewUrl)
+function readFileAsDataUrl(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader()
+    reader.onload = () => {
+      if (typeof reader.result === "string") {
+        resolve(reader.result)
+        return
+      }
+      reject(new Error("Unable to read file."))
     }
-  }, [previewUrl])
+    reader.onerror = () => {
+      reject(reader.error ?? new Error("Unable to read file."))
+    }
+    reader.readAsDataURL(file)
+  })
+}
+
+export function LogoUpload({
+  error,
+  name = "logoFile",
+  previewName = "logoPreview",
+  label = "Organization Logo",
+  uploadTitle = "Upload logo",
+  helperText = "PNG, JPG, SVG up to 2MB",
+}) {
+  const { setValue, watch } = useFormContext()
+  const previewUrl = watch(previewName)
+
+  async function handleFileChange(event) {
+    const file = event.target.files?.[0]
+
+    if (!file) {
+      setValue(name, undefined, { shouldDirty: true, shouldValidate: true })
+      setValue(previewName, null, { shouldDirty: true })
+      return
+    }
+
+    try {
+      const dataUrl = await readFileAsDataUrl(file)
+      setValue(name, file, { shouldDirty: true, shouldValidate: true })
+      setValue(previewName, dataUrl, { shouldDirty: true })
+    } catch {
+      setValue(name, undefined, { shouldDirty: true, shouldValidate: true })
+      setValue(previewName, null, { shouldDirty: true })
+    }
+  }
 
   return (
     <Box>
@@ -35,7 +64,7 @@ export function LogoUpload({ error }) {
           color: "text.secondary",
         }}
       >
-        Organization Logo
+        {label}
       </Typography>
 
       <Box
@@ -56,7 +85,7 @@ export function LogoUpload({ error }) {
           overflow: "hidden",
           transition: "background-color 150ms ease",
           "&:hover": {
-            bgcolor: "rgba(53, 54, 58, 0.9)",
+            bgcolor: "action.hover",
           },
         }}
       >
@@ -65,8 +94,7 @@ export function LogoUpload({ error }) {
           type="file"
           accept=".png,.jpg,.jpeg,.svg,image/png,image/jpeg,image/svg+xml"
           onChange={(event) => {
-            const file = event.target.files?.[0]
-            setValue("logoFile", file ?? undefined)
+            void handleFileChange(event)
           }}
           sx={{
             position: "absolute",
@@ -81,7 +109,11 @@ export function LogoUpload({ error }) {
           }}
         />
 
-        {previewUrl ? <LogoPreview src={previewUrl} /> : <LogoUploadPlaceholder />}
+        {previewUrl ? (
+          <LogoPreview src={previewUrl} />
+        ) : (
+          <LogoUploadPlaceholder title={uploadTitle} helperText={helperText} />
+        )}
       </Box>
 
       {error ? (

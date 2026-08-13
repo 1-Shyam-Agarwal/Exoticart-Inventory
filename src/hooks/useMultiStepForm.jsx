@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react"
+import { useState } from "react"
 import { useForm } from "react-hook-form"
 
 import BusinessIcon from "@mui/icons-material/Business"
@@ -6,7 +6,10 @@ import PersonIcon from "@mui/icons-material/Person"
 import LocationOnIcon from "@mui/icons-material/LocationOn"
 import WorkHistoryIcon from "@mui/icons-material/WorkHistory"
 import AccountBalanceIcon from "@mui/icons-material/AccountBalance"
+import FactCheckOutlinedIcon from "@mui/icons-material/FactCheckOutlined"
+import { z } from "zod"
 
+import timezones from "../data/timezone.json"
 import {
   organizationIdentitySchema,
   ownerDetailsSchema,
@@ -41,6 +44,11 @@ export const steps = [
     title: "Bank Details",
     icon: <AccountBalanceIcon />,
   },
+  {
+    id: 6,
+    title: "Review",
+    icon: <FactCheckOutlinedIcon />,
+  },
 ]
 
 const STEP_FIELDS = [
@@ -66,6 +74,7 @@ const STEP_FIELDS = [
     "upiId",
     "qrFile",
   ],
+  [],
 ]
 
 const stepSchemas = [
@@ -74,29 +83,46 @@ const stepSchemas = [
   locationSchema,
   businessDetailsSchema,
   bankDetailsSchema,
+  z.object({}),
 ]
+
+function detectTimezone() {
+  try {
+    let detected = Intl.DateTimeFormat().resolvedOptions().timeZone
+    if (detected === "Asia/Kolkata") detected = "Asia/Calcutta"
+    if (timezones.includes(detected)) return detected
+  } catch {
+    // fall through
+  }
+  return "Asia/Calcutta"
+}
 
 const defaultValues = {
   name: "",
   industry: "",
   logoFile: undefined,
+  logoPreview: null,
 
   ownerName: "",
-  countryCode: "",
+  countryCode: "+91",
   mobileNumber: "",
   email: "",
 
-  country: "",
+  country: "India",
   state: "",
-  currency: "",
-  timezone: "",
+  currency: "INR",
+  timezone: detectTimezone(),
   street1: "",
   street2: "",
   city: "",
   postalCode: "",
 
-  inventoryStartDate: undefined,
-  fiscalYear: "",
+  inventoryStartDate: (() => {
+    const today = new Date()
+    today.setHours(0, 0, 0, 0)
+    return today
+  })(),
+  fiscalYear: "April - March",
   pan: "",
   gst: "",
 
@@ -107,6 +133,7 @@ const defaultValues = {
   accountType: "",
   upiId: "",
   qrFile: undefined,
+  qrPreview: null,
 }
 
 function pickStepValues(stepIndex, values) {
@@ -157,20 +184,11 @@ export function useMultiStepForm() {
     getValues,
     setError,
     clearErrors,
-    watch,
     formState: { errors, isSubmitting },
   } = form
 
-  const watchedValues = watch()
-
   const isFirstStep = currentStep === 0
   const isLastStep = currentStep === steps.length - 1
-
-  const canContinue = useMemo(() => {
-    return stepSchemas[currentStep].safeParse(
-      pickStepValues(currentStep, watchedValues),
-    ).success
-  }, [currentStep, watchedValues])
 
   const goToNextStep = () => {
     const result = validateStep(currentStep, getValues(), setError, clearErrors)
@@ -199,10 +217,13 @@ export function useMultiStepForm() {
   }
 
   const submitForm = async (data) => {
-    const result = validateStep(currentStep, data, setError, clearErrors)
-
-    if (!result.success) {
-      return
+    // Re-validate every data step before create
+    for (let stepIndex = 0; stepIndex < stepSchemas.length - 1; stepIndex += 1) {
+      const result = validateStep(stepIndex, data, setError, clearErrors)
+      if (!result.success) {
+        setCurrentStep(stepIndex)
+        return
+      }
     }
 
     try {
@@ -227,7 +248,6 @@ export function useMultiStepForm() {
 
     isFirstStep,
     isLastStep,
-    canContinue,
 
     errors,
     isSubmitting,

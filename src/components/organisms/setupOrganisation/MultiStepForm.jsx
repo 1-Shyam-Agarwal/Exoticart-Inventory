@@ -3,11 +3,13 @@ import Box from "@mui/material/Box"
 import { useMultiStepForm } from "../../../hooks/useMultiStepForm"
 import ProgressBar from "./ProgressBar"
 import FormNavActions from "./FormNavActions"
+import SetupOrgHeader from "./SetupOrgHeader"
 import StepOrganizationIdentity from "../../molecules/setupOrganisation/StepOrganizationIdentity"
 import StepOwnerDetails from "../../molecules/setupOrganisation/StepOwnerDetails"
 import StepLocation from "../../molecules/setupOrganisation/StepLocation"
 import StepBusinessDetails from "../../molecules/setupOrganisation/StepBusinessDetails"
 import StepBankDetails from "../../molecules/setupOrganisation/StepBankDetails"
+import StepReview from "../../molecules/setupOrganisation/StepReview"
 
 function MultiStepForm() {
   const form = useMultiStepForm()
@@ -17,9 +19,9 @@ function MultiStepForm() {
     isFirstStep,
     isLastStep,
     isSubmitting,
-    canContinue,
     goToNextStep,
     goToPreviousStep,
+    goToStep,
     handleSubmit,
     submitForm,
   } = form
@@ -35,6 +37,8 @@ function MultiStepForm() {
           bgcolor: "background.main",
         }}
       >
+        <SetupOrgHeader title="Setup Organization Profile" />
+
         <Box
           component="main"
           sx={{
@@ -72,12 +76,12 @@ function MultiStepForm() {
             {currentStep === 2 && <StepLocation />}
             {currentStep === 3 && <StepBusinessDetails />}
             {currentStep === 4 && <StepBankDetails />}
+            {currentStep === 5 && <StepReview onEditStep={goToStep} />}
 
             <FormNavActions
               isFirstStep={isFirstStep}
               isLastStep={isLastStep}
               isSubmitting={isSubmitting}
-              canContinue={canContinue}
               onBack={goToPreviousStep}
               onContinue={goToNextStep}
             />

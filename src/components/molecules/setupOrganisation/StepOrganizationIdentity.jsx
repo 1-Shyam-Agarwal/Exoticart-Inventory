@@ -1,83 +1,14 @@
-import { Controller, useFormContext } from "react-hook-form"
-import Autocomplete from "@mui/material/Autocomplete"
+import { useFormContext } from "react-hook-form"
 import Box from "@mui/material/Box"
 import Stack from "@mui/material/Stack"
 import TextField from "@mui/material/TextField"
 import Typography from "@mui/material/Typography"
 import industries from "../../../data/industry.json"
+import { FieldError } from "./FieldError"
+import { FieldLabel } from "./FieldLabel"
 import { LogoUpload } from "./ImageField/ImageUpload"
-
-/** Matches Inventory Management System Organization Identity field styles */
-const underlineFieldSx = {
-  "& .MuiInputBase-root": {
-    height: 40,
-    alignItems: "flex-end",
-    backgroundColor: "transparent",
-    "&:before": {
-      borderBottomColor: "border.main",
-    },
-    "&:hover:not(.Mui-disabled):before": {
-      borderBottomColor: "border.main",
-    },
-    "&:after": {
-      borderBottomWidth: 1,
-      borderBottomColor: "primary.main",
-    },
-  },
-  "& .MuiInputBase-input": {
-    px: 0,
-    py: 1,
-    fontSize: "0.875rem",
-    color: "text.primary",
-    "&::placeholder": {
-      color: "text.secondary",
-      opacity: 1,
-    },
-  },
-}
-
-function FieldLabel({ htmlFor, children, required = false }) {
-  return (
-    <Typography
-      variant="caption"
-      component="label"
-      htmlFor={htmlFor}
-      sx={{
-        display: "block",
-        mb: 0.5,
-        fontSize: "0.75rem",
-        fontWeight: 400,
-        lineHeight: 1.5,
-        color: "text.secondary",
-      }}
-    >
-      {children}
-      {required ? (
-        <Box component="span" sx={{ color: "error.main" }}>
-          {" *"}
-        </Box>
-      ) : null}
-    </Typography>
-  )
-}
-
-function FieldError({ message }) {
-  if (!message) return null
-
-  return (
-    <Typography
-      role="alert"
-      sx={{
-        mt: 0.5,
-        fontSize: "0.875rem",
-        fontWeight: 400,
-        color: "error.main",
-      }}
-    >
-      {message}
-    </Typography>
-  )
-}
+import { UnderlineAutocomplete } from "./UnderlineAutocomplete"
+import { stepTitleSx, underlineFieldSx } from "./fieldStyles"
 
 export default function StepOrganizationIdentity() {
   const {
@@ -88,17 +19,7 @@ export default function StepOrganizationIdentity() {
 
   return (
     <Box sx={{ maxWidth: "42rem", width: "100%" }}>
-      <Typography
-        component="h2"
-        sx={{
-          mb: 4,
-          fontFamily: (theme) => theme.typography.main,
-          fontSize: "1.875rem",
-          fontWeight: 400,
-          lineHeight: 1.2,
-          color: "text.primary",
-        }}
-      >
+      <Typography component="h2" sx={stepTitleSx}>
         Organization Identity
       </Typography>
 
@@ -127,47 +48,17 @@ export default function StepOrganizationIdentity() {
           <FieldError message={errors.name?.message} />
         </Box>
 
-        <Box>
-          <FieldLabel htmlFor="organization-industry" required>
-            Industry
-          </FieldLabel>
-
-          <Controller
-            name="industry"
-            control={control}
-            rules={{ required: "Industry is required" }}
-            render={({ field: { onChange, value, ref } }) => (
-              <Autocomplete
-                id="organization-industry"
-                options={industries}
-                value={value || null}
-                onChange={(_, newValue) => onChange(newValue ?? "")}
-                autoHighlight
-                openOnFocus
-                slotProps={{
-                  paper: {
-                    sx: {
-                      bgcolor: "background.paper",
-                      border: "1px solid",
-                      borderColor: "border.main",
-                    },
-                  },
-                }}
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    inputRef={ref}
-                    variant="standard"
-                    placeholder="Select industry"
-                    error={Boolean(errors.industry)}
-                    sx={underlineFieldSx}
-                  />
-                )}
-              />
-            )}
-          />
-          <FieldError message={errors.industry?.message} />
-        </Box>
+        <UnderlineAutocomplete
+          name="industry"
+          control={control}
+          errors={errors}
+          htmlFor="organization-industry"
+          label="Industry"
+          required
+          options={industries}
+          placeholder="Select industry"
+          rules={{ required: "Industry is required" }}
+        />
       </Stack>
     </Box>
   )
