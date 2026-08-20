@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form"
 import { steps, stepSchemas } from "../components/setupOrganisation/constants"
 import { defaultValues } from "../components/setupOrganisation/defaultValues"
 import { validateStep } from "../components/setupOrganisation/validateStep"
+import { createOrganization } from "../services/organizationApi"
 
 export { steps }
 
@@ -64,10 +65,22 @@ export function useMultiStepForm() {
     }
 
     try {
-      console.log("Form data submitted:", data)
+      const result = await createOrganization(data)
+
+      if (result?.organization?.success === false) {
+        setError("root", {
+          type: "server",
+          message: result.organization.message ?? "Failed to create organization",
+        })
+        return
+      }
+
       setIsSubmitted(true)
     } catch (error) {
-      console.error("Submit error:", error)
+      setError("root", {
+        type: "server",
+        message: error.message ?? "Failed to create organization",
+      })
     }
   }
 

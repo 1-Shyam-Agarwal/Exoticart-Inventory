@@ -9,6 +9,8 @@ const bankDetailsSchema = z.object({
   ifscCode: z.string().trim().min(11),
   accountType: z.enum(["savings", "current"]),
   upiId: z.string().trim().min(5).optional(),
+
+  qrPath: z.string().optional(),
 })
 
 export default class BankDetailsValidator {

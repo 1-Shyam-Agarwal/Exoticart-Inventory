@@ -1,5 +1,6 @@
 import OrganizationService from "../services/organizationService.js"
 import BankDetailsService from "../services/bankDetailsService.js"
+import FileStorageService from "../services/fileStorageService.js"
 import OrganizationValidator from "../validators/organizationValidator.js"
 import BankDetailsValidator from "../validators/bankDetailsValidator.js"
 
@@ -21,8 +22,11 @@ export default class OrganizationsController {
   }
 
   async store({ data }) {
-    const organizationPayload = await OrganizationValidator.validateAsync(data)
-    const bankDetailsPayload = await BankDetailsValidator.validateAsync(data)
+    const logoPath = FileStorageService.saveLogo(data.logo) ?? undefined
+    const qrPath = FileStorageService.saveQrCode(data.qr) ?? undefined
+
+    const organizationPayload = await OrganizationValidator.validateAsync({ ...data, logoPath })
+    const bankDetailsPayload = await BankDetailsValidator.validateAsync({ ...data, qrPath })
 
     const organization = this.organizationService.create(organizationPayload)
     const bankDetails = this.bankDetailsService.create(organization.data.id, bankDetailsPayload)

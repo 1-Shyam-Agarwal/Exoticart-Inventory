@@ -1,3 +1,7 @@
+  function convertToIsoDate(date) {
+    return date instanceof Date ? date.toISOString().slice(0, 10) : date
+  }
+
   export default class OrganizationTransformer {
 
     static index(formData) {
@@ -20,7 +24,7 @@
         city: formData.city ?? null,
         postal_code: formData.postalCode ?? null,
 
-        inventory_start_date: formData.inventoryStartDate,
+        inventory_start_date: convertToIsoDate(formData.inventoryStartDate),
         fiscal_year: formData.fiscalYear,
         pan: formData.pan ?? null,
         gst: formData.gst ?? null,
