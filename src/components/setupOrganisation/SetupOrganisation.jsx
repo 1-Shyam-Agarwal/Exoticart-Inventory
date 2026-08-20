@@ -39,6 +39,7 @@ export default function SetupOrganisation() {
     isFirstStep,
     isLastStep,
     isSubmitting,
+    errors,
     goToNextStep,
     goToPreviousStep,
     goToStep,
@@ -107,6 +108,7 @@ export default function SetupOrganisation() {
                 isSubmitting={isSubmitting}
                 onBack={handleBack}
                 onContinue={handleNext}
+                submitError={errors.root?.message}
               />
             </React.Fragment>
           </Box>
