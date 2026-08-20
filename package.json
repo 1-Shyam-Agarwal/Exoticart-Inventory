@@ -9,7 +9,12 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "electron": "electron ."
+    "electron": "electron .",
+    "prisma:generate": "prisma generate",
+    "prisma:migrate": "prisma migrate dev",
+    "prisma:deploy": "prisma migrate deploy",
+    "prisma:studio": "prisma studio",
+    "postinstall": "prisma generate"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
@@ -19,6 +24,7 @@
     "@mui/icons-material": "^9.3.1",
     "@mui/lab": "^9.0.0-beta.8",
     "@mui/material": "^9.3.1",
+    "@prisma/client": "^6.19.3",
     "@tailwindcss/vite": "^4.3.3",
     "electron": "^43.3.0",
     "lucide-react": "^1.31.0",
@@ -38,6 +44,7 @@
     "eslint-plugin-react-hooks": "^7.1.1",
     "eslint-plugin-react-refresh": "^0.5.3",
     "globals": "^17.7.0",
+    "prisma": "^6.19.3",
     "vite": "^8.2.0"
   }
 }

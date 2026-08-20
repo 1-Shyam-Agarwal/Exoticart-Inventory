@@ -1,0 +1,120 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Organization {
+  id       Int    @id @default(autoincrement())
+
+  // Step 0: Organization Identity
+  name     String
+  industry String
+  logoPath String?
+
+  // Step 2: Organization Configuration
+  currency String
+  timezone String
+
+  // Step 3: Business Details
+  inventoryStartDate DateTime
+  fiscalYear         String
+  pan                String? @unique
+  gst                String? @unique
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  contacts    OrganizationContact[]
+  addresses   OrganizationAddress[]
+  bankDetails OrganizationBankDetail[]
+}
+
+model OrganizationContact {
+  id             Int    @id @default(autoincrement())
+  organizationId Int
+  name           String
+  position       String
+  isPrimary      Boolean @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  numbers      OrganizationContactNumber[]
+  emails       OrganizationContactEmail[]
+}
+
+model OrganizationContactNumber {
+  id           Int    @id @default(autoincrement())
+  contactId    Int
+  countryCode  String @default("+91")
+  mobileNumber String
+  isPrimary    Boolean @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  contact OrganizationContact @relation(fields: [contactId], references: [id], onDelete: Cascade)
+}
+
+model OrganizationContactEmail {
+  id        Int    @id @default(autoincrement())
+  contactId Int
+  email     String
+  isPrimary Boolean @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  contact OrganizationContact @relation(fields: [contactId], references: [id], onDelete: Cascade)
+}
+
+model OrganizationAddress {
+  id             Int    @id @default(autoincrement())
+  organizationId Int
+
+  name        String
+  addressType String
+
+  country    String
+  state      String
+  city       String?
+  street1    String?
+  street2    String?
+  postalCode String?
+
+  isPrimary Boolean @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+}
+
+model OrganizationBankDetail {
+  id             Int    @id @default(autoincrement())
+  organizationId Int
+
+  accountHolderName String
+  bankName          String
+  accountNumber     String
+  ifscCode          String
+  accountType       String
+
+  upiId  String?
+  qrPath String?
+
+  isPrimary Boolean @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+}

@@ -1,55 +1,24 @@
-import { getDb } from "../db/index.js"
+import { getPrismaClient } from "../db/index.js"
 import BankDetailsTransformer from "../transformers/bankDetailsTransformer.js"
 import BankDetailsSerializer from "../serialisers/bankDetailsSerialiser.js"
 
-
 export default class BankDetailsService {
-  constructor(db = getDb()) {
-    this.db = db
+  constructor(prisma = getPrismaClient()) {
+    this.prisma = prisma
   }
 
-  #insert(payload) {
-    const stmt = this.db.prepare(`
-      INSERT INTO organization_bank_details (
-        organization_id,
-        account_holder_name,
-        bank_name,
-        account_number,
-        ifsc_code,
-        account_type,
-        upi_id,
-        qr_path
-      )
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-    `)
+  async create(organizationId, payload, client = this.prisma) {
+    const data = { organizationId, ...BankDetailsTransformer.index(payload) }
+    const bankDetail = await client.organizationBankDetail.create({ data })
 
-    return stmt.run(
-      payload.organization_id,
-      payload.account_holder_name,
-      payload.bank_name,
-      payload.account_number,
-      payload.ifsc_code,
-      payload.account_type,
-      payload.upi_id,
-      payload.qr_path
-    )
+    return BankDetailsSerializer.index(bankDetail)
   }
 
-  create(organizationId, payload) {
-    const bankDetails = {
-      organization_id: organizationId,
-      ...BankDetailsTransformer.index(payload),
-    }
+  async findByOrganizationId(organizationId, client = this.prisma) {
+    const bankDetail = await client.organizationBankDetail.findFirst({
+      where: { organizationId },
+    })
 
-    this.#insert(bankDetails)
-    return this.findByOrganizationId(organizationId)
-  }
-
-  findByOrganizationId(organizationId) {
-    const bankDetails = this.db
-      .prepare("SELECT * FROM organization_bank_details WHERE organization_id = ?")
-      .get(organizationId)
-
-    return BankDetailsSerializer.index(bankDetails)
+    return BankDetailsSerializer.index(bankDetail)
   }
 }

@@ -1,14 +1,15 @@
-  export default class BankDetailsTransformer {
+export default class BankDetailsTransformer {
 
-    static index(formData) {
-      return {
-        account_holder_name: formData.accountHolderName,
-        bank_name: formData.bankName,
-        account_number: formData.accountNumber,
-        ifsc_code: formData.ifscCode,
-        account_type: formData.accountType,
-        upi_id: formData.upiId ?? null,
-        qr_path: formData.qrPath ?? null,
-      }
+  static index(formData) {
+    return {
+      accountHolderName: formData.accountHolderName,
+      bankName: formData.bankName,
+      accountNumber: formData.accountNumber,
+      ifscCode: formData.ifscCode,
+      accountType: formData.accountType,
+      upiId: formData.upiId ?? null,
+      qrPath: formData.qrPath ?? null,
+      isPrimary: true,
     }
   }
+}

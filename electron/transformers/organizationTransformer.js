@@ -1,33 +1,60 @@
-  function convertToIsoDate(date) {
-    return date instanceof Date ? date.toISOString().slice(0, 10) : date
-  }
+export default class OrganizationTransformer {
 
-  export default class OrganizationTransformer {
+  static index(formData) {
+    return {
+      name: formData.name,
+      industry: formData.industry,
+      logoPath: formData.logoPath ?? null,
 
-    static index(formData) {
-      return {
-        name: formData.name,
-        industry: formData.industry,
-        logo_path: formData.logoPath ?? null,
+      currency: formData.currency,
+      timezone: formData.timezone,
 
-        owner_name: formData.ownerName,
-        owner_country_code: formData.countryCode,
-        owner_mobile_number: formData.mobileNumber,
-        owner_email: formData.email,
+      inventoryStartDate: formData.inventoryStartDate,
+      fiscalYear: formData.fiscalYear,
+      pan: formData.pan ?? null,
+      gst: formData.gst ?? null,
 
-        country: formData.country,
-        state: formData.state,
-        currency: formData.currency,
-        timezone: formData.timezone,
-        street1: formData.street1 ?? null,
-        street2: formData.street2 ?? null,
-        city: formData.city ?? null,
-        postal_code: formData.postalCode ?? null,
+      contacts: {
+        create: [
+          {
+            name: formData.ownerName,
+            // The form only collects a single owner today, with no "position"
+            // field. Hardcoded until multi-contact UI collects it explicitly.
+            position: "Owner",
+            isPrimary: true,
+            numbers: {
+              create: [
+                {
+                  countryCode: formData.countryCode,
+                  mobileNumber: formData.mobileNumber,
+                  isPrimary: true,
+                },
+              ],
+            },
+            emails: formData.email
+              ? { create: [{ email: formData.email, isPrimary: true }] }
+              : undefined,
+          },
+        ],
+      },
 
-        inventory_start_date: convertToIsoDate(formData.inventoryStartDate),
-        fiscal_year: formData.fiscalYear,
-        pan: formData.pan ?? null,
-        gst: formData.gst ?? null,
-      }
+      addresses: {
+        create: [
+          {
+            // The form only collects one address today, with no "name" or
+            // "addressType" field. Hardcoded until multi-address UI collects them.
+            name: "Head Office",
+            addressType: "head_office",
+            country: formData.country,
+            state: formData.state,
+            city: formData.city ?? null,
+            street1: formData.street1 ?? null,
+            street2: formData.street2 ?? null,
+            postalCode: formData.postalCode ?? null,
+            isPrimary: true,
+          },
+        ],
+      },
     }
+  }
 }
