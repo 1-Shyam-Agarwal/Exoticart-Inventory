@@ -1,18 +1,16 @@
 import { organizationIdentitySchema } from "../../shared/validation/organizationIdentitySchema.js"
 import { ownerDetailsSchema } from "../../shared/validation/ownerDetailsSchema.js"
 import { locationSchema } from "../../shared/validation/locationSchema.js"
+import { businessDetailsSchema } from "../../shared/validation/businessDetailsSchema.js"
 
 export default class OrganizationDraftValidator {
   static schema = organizationIdentitySchema
   static ownerDetailsSchema = ownerDetailsSchema
   static locationSchema = locationSchema
+  static businessDetailsSchema = businessDetailsSchema
 
   static validateOrganisationIdentity(data) {
     return organizationIdentitySchema.parse(data)
-  }
-
-  static async validateOrganisationIdentityAsync(data) {
-    return organizationIdentitySchema.parseAsync(data)
   }
 
   static validateOwnerDetails(data) {
@@ -21,5 +19,9 @@ export default class OrganizationDraftValidator {
 
   static validateLocation(data) {
     return locationSchema.parse(data)
+  }
+
+  static validateBusinessDetails(data) {
+    return businessDetailsSchema.parse(data)
   }
 }

@@ -32,6 +32,11 @@ app.whenReady().then(() => {
     (_event, data) => new OrganizationDraftController().saveLocation({ data })
   )
 
+  ipcMain.handle(
+    'organization-draft:save-business-details',
+    (_event, data) => new OrganizationDraftController().saveBusinessDetails({ data })
+  )
+
   createWindow()
 
   app.on('activate', () => {

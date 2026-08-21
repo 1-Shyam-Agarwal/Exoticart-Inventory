@@ -35,3 +35,15 @@ export async function saveLocation(values, draftId) {
     postalCode,
   })
 }
+
+export async function saveBusinessDetails(values, draftId) {
+  const { inventoryStartDate, fiscalYear, pan, gst } = values
+
+  return window.api.organizationDraft.saveBusinessDetails({
+    draftId,
+    inventoryStartDate,
+    fiscalYear,
+    pan,
+    gst,
+  })
+}

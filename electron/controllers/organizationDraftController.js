@@ -108,4 +108,34 @@ export default class OrganizationDraftController {
       }
     }
   }
+
+  async saveBusinessDetails({ data }) {
+    try {
+      const fields = OrganizationDraftValidator.validateBusinessDetails({
+        inventoryStartDate: data.inventoryStartDate,
+        fiscalYear: data.fiscalYear,
+        pan: data.pan,
+        gst: data.gst,
+      })
+
+      let draftId = data?.draftId
+
+      const updated = await this.draftService.saveBusinessDetails(draftId, fields)
+
+      return { success: true, draft: updated }
+
+    } catch (error) {
+
+      if (error instanceof z.ZodError) {
+        return {
+          success: false,
+          message: error?.message ?? "Invalid business details data"
+        }
+      }
+      return {
+        success: false,
+        message: error?.message ?? "Internal Server Error",
+      }
+    }
+  }
 }

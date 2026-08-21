@@ -1,8 +1,8 @@
 import { z } from "zod"
-import fiscalYears from "../data/fiscalYear.json"
 import { organizationIdentitySchema as sharedOrganizationIdentitySchema } from "../../shared/validation/organizationIdentitySchema"
 import { ownerDetailsSchema as sharedOwnerDetailsSchema } from "../../shared/validation/ownerDetailsSchema"
 import { locationSchema as sharedLocationSchema } from "../../shared/validation/locationSchema"
+import { businessDetailsSchema as sharedBusinessDetailsSchema } from "../../shared/validation/businessDetailsSchema"
 
 export const organizationIdentitySchema = sharedOrganizationIdentitySchema.extend({
   logoFile: z
@@ -16,24 +16,7 @@ export const ownerDetailsSchema = sharedOwnerDetailsSchema
 
 export const locationSchema = sharedLocationSchema
 
-function isNotFutureDate(date) {
-  const endOfToday = new Date()
-  endOfToday.setHours(23, 59, 59, 999)
-  return date.getTime() <= endOfToday.getTime()
-}
-
-export const businessDetailsSchema = z.object({
-  inventoryStartDate: z
-    .date({ error: "Inventory start date is required" })
-    .refine(isNotFutureDate, {
-      message: "Inventory start date cannot be in the future",
-    }),
-  fiscalYear: z.enum(fiscalYears, {
-    message: "Select a valid fiscal year",
-  }),
-  pan: z.string().trim().max(10, "PAN must be 10 characters or fewer").optional(),
-  gst: z.string().trim().max(15, "GST must be 15 characters or fewer").optional(),
-})
+export const businessDetailsSchema = sharedBusinessDetailsSchema
 
 export const bankDetailsSchema = z.object({
   accountHolderName: z

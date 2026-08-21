@@ -7,6 +7,8 @@ contextBridge.exposeInMainWorld("api", {
         saveOwnerDetails: (data) =>
             ipcRenderer.invoke("organization-draft:save-owner-details", data),
         saveLocation: (data) =>
-            ipcRenderer.invoke("organization-draft:save-location", data)
+            ipcRenderer.invoke("organization-draft:save-location", data),
+        saveBusinessDetails: (data) =>
+            ipcRenderer.invoke("organization-draft:save-business-details", data)
     }
 })
