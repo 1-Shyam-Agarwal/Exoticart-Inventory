@@ -19,3 +19,19 @@ export async function saveOwnerDetails(values, draftId) {
     email,
   })
 }
+
+export async function saveLocation(values, draftId) {
+  const { country, state, currency, timezone, street1, street2, city, postalCode } = values
+
+  return window.api.organizationDraft.saveLocation({
+    draftId,
+    country,
+    state,
+    currency,
+    timezone,
+    street1,
+    street2,
+    city,
+    postalCode,
+  })
+}

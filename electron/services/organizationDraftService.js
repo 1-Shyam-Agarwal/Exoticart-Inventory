@@ -8,10 +8,14 @@ export default class OrganizationDraftService {
   }
 
   async saveOrganisationIdentity(draftId, fields, logoPath) {
+    const existing = await prisma.organizationDraft.findUniqueOrThrow({
+      where: { id: draftId },
+    })
+
     return prisma.organizationDraft.update({
       where: { id: draftId },
       data: {
-        data: fields,
+        data: { ...existing.data, ...fields },
         currentStep: 2,
         ...(logoPath && { logoPath }),
       },
@@ -28,6 +32,20 @@ export default class OrganizationDraftService {
       data: {
         data: { ...existing.data, ...fields },
         currentStep: 3,
+      },
+    })
+  }
+
+  async saveLocation(draftId, fields) {
+    const existing = await prisma.organizationDraft.findUniqueOrThrow({
+      where: { id: draftId },
+    })
+
+    return prisma.organizationDraft.update({
+      where: { id: draftId },
+      data: {
+        data: { ...existing.data, ...fields },
+        currentStep: 4,
       },
     })
   }

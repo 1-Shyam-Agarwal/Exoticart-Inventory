@@ -1,17 +1,8 @@
 import { z } from "zod"
-import countries from "../data/country.json"
-import currencies from "../data/currency.json"
-import states from "../data/state.json"
-import timezones from "../data/timezone.json"
 import fiscalYears from "../data/fiscalYear.json"
 import { organizationIdentitySchema as sharedOrganizationIdentitySchema } from "../../shared/validation/organizationIdentitySchema"
 import { ownerDetailsSchema as sharedOwnerDetailsSchema } from "../../shared/validation/ownerDetailsSchema"
-
-const emptyToUndefined = (value) =>
-  value === "" || value == null ? undefined : value
-
-const optionalTrimmedString = (schema) =>
-  z.preprocess(emptyToUndefined, schema.optional())
+import { locationSchema as sharedLocationSchema } from "../../shared/validation/locationSchema"
 
 export const organizationIdentitySchema = sharedOrganizationIdentitySchema.extend({
   logoFile: z
@@ -23,32 +14,7 @@ export const organizationIdentitySchema = sharedOrganizationIdentitySchema.exten
 
 export const ownerDetailsSchema = sharedOwnerDetailsSchema
 
-export const locationSchema = z.object({
-  country: z.enum(countries, {
-    message: "Select a valid country",
-  }),
-  state: z.enum(states, {
-    message: "Select a valid state / union territory",
-  }),
-  currency: z.enum(currencies, {
-    message: "Select a valid currency",
-  }),
-  timezone: z.enum(timezones, {
-    message: "Select a valid timezone",
-  }),
-  street1: optionalTrimmedString(
-    z.string().trim().max(300, "Street 1 must be 300 characters or fewer"),
-  ),
-  street2: optionalTrimmedString(
-    z.string().trim().max(300, "Street 2 must be 300 characters or fewer"),
-  ),
-  city: optionalTrimmedString(
-    z.string().trim().max(100, "City must be 100 characters or fewer"),
-  ),
-  postalCode: optionalTrimmedString(
-    z.string().trim().max(10, "ZIP / Postal Code must be 10 characters or fewer"),
-  ),
-})
+export const locationSchema = sharedLocationSchema
 
 function isNotFutureDate(date) {
   const endOfToday = new Date()
@@ -65,12 +31,8 @@ export const businessDetailsSchema = z.object({
   fiscalYear: z.enum(fiscalYears, {
     message: "Select a valid fiscal year",
   }),
-  pan: optionalTrimmedString(
-    z.string().trim().min(10, "Should have at least 10 characters"),
-  ),
-  gst: optionalTrimmedString(
-    z.string().trim().min(10, "Should have at least 10 characters"),
-  ),
+  pan: z.string().trim().max(10, "PAN must be 10 characters or fewer").optional(),
+  gst: z.string().trim().max(15, "GST must be 15 characters or fewer").optional(),
 })
 
 export const bankDetailsSchema = z.object({
@@ -95,9 +57,7 @@ export const bankDetailsSchema = z.object({
   accountType: z.enum(["savings", "current"], {
     message: "Select an account type",
   }),
-  upiId: optionalTrimmedString(
-    z.string().trim().min(5, "Should have at least 5 characters"),
-  ),
+  upiId: z.string().trim().max(50, "UPI ID must be 50 characters or fewer").optional(),
   qrFile: z
     .file()
     .min(1000, "QR code file must be at least 1Kb")

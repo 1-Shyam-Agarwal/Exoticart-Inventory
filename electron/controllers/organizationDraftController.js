@@ -74,4 +74,38 @@ export default class OrganizationDraftController {
       }
     }
   }
+
+  async saveLocation({ data }) {
+    try {
+      const fields = OrganizationDraftValidator.validateLocation({
+        country: data.country,
+        state: data.state,
+        currency: data.currency,
+        timezone: data.timezone,
+        street1: data.street1,
+        street2: data.street2,
+        city: data.city,
+        postalCode: data.postalCode,
+      })
+
+      let draftId = data?.draftId
+
+      const updated = await this.draftService.saveLocation(draftId, fields)
+
+      return { success: true, draft: updated }
+
+    } catch (error) {
+
+      if (error instanceof z.ZodError) {
+        return {
+          success: false,
+          message: error?.message ?? "Invalid location data"
+        }
+      }
+      return {
+        success: false,
+        message: error?.message ?? "Internal Server Error",
+      }
+    }
+  }
 }
