@@ -22,6 +22,11 @@ app.whenReady().then(() => {
     (_event, data) => new OrganizationDraftController().saveOrganisationIdentity({ data })
   )
 
+  ipcMain.handle(
+    'organization-draft:save-owner-details',
+    (_event, data) => new OrganizationDraftController().saveOwnerDetails({ data })
+  )
+
   createWindow()
 
   app.on('activate', () => {

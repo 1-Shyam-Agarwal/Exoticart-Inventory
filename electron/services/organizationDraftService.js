@@ -17,4 +17,18 @@ export default class OrganizationDraftService {
       },
     })
   }
+
+  async saveOwnerDetails(draftId, fields) {
+    const existing = await prisma.organizationDraft.findUniqueOrThrow({
+      where: { id: draftId },
+    })
+
+    return prisma.organizationDraft.update({
+      where: { id: draftId },
+      data: {
+        data: { ...existing.data, ...fields },
+        currentStep: 3,
+      },
+    })
+  }
 }

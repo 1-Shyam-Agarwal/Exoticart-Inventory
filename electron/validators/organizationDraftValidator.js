@@ -1,7 +1,9 @@
 import { organizationIdentitySchema } from "../../shared/validation/organizationIdentitySchema.js"
+import { ownerDetailsSchema } from "../../shared/validation/ownerDetailsSchema.js"
 
 export default class OrganizationDraftValidator {
   static schema = organizationIdentitySchema
+  static ownerDetailsSchema = ownerDetailsSchema
 
   static validateOrganisationIdentity(data) {
     return organizationIdentitySchema.parse(data)
@@ -9,5 +11,9 @@ export default class OrganizationDraftValidator {
 
   static async validateOrganisationIdentityAsync(data) {
     return organizationIdentitySchema.parseAsync(data)
+  }
+
+  static validateOwnerDetails(data) {
+    return ownerDetailsSchema.parse(data)
   }
 }

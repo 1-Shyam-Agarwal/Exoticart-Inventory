@@ -5,6 +5,7 @@ import states from "../data/state.json"
 import timezones from "../data/timezone.json"
 import fiscalYears from "../data/fiscalYear.json"
 import { organizationIdentitySchema as sharedOrganizationIdentitySchema } from "../../shared/validation/organizationIdentitySchema"
+import { ownerDetailsSchema as sharedOwnerDetailsSchema } from "../../shared/validation/ownerDetailsSchema"
 
 const emptyToUndefined = (value) =>
   value === "" || value == null ? undefined : value
@@ -20,19 +21,7 @@ export const organizationIdentitySchema = sharedOrganizationIdentitySchema.exten
     .optional(),
 })
 
-export const ownerDetailsSchema = z.object({
-  ownerName: z
-    .string()
-    .trim()
-    .min(2, "Owner name must be at least 2 characters")
-    .max(100, "Owner name must be 100 characters or fewer"),
-  countryCode: z.string().min(1, "Country code is required"),
-  mobileNumber: z
-    .string()
-    .trim()
-    .regex(/^\d{10}$/, "Enter a valid 10-digit mobile number"),
-  email: z.email("Enter a valid email address"),
-})
+export const ownerDetailsSchema = sharedOwnerDetailsSchema
 
 export const locationSchema = z.object({
   country: z.enum(countries, {

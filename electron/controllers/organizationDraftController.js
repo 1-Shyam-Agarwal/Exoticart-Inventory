@@ -44,4 +44,34 @@ export default class OrganizationDraftController {
       }
     }
   }
+
+  async saveOwnerDetails({ data }) {
+    try {
+      const fields = OrganizationDraftValidator.validateOwnerDetails({
+        ownerName: data.ownerName,
+        countryCode: data.countryCode,
+        mobileNumber: data.mobileNumber,
+        email: data.email,
+      })
+
+      let draftId = data?.draftId
+
+      const updated = await this.draftService.saveOwnerDetails(draftId, fields)
+
+      return { success: true, draft: updated }
+
+    } catch (error) {
+  
+      if (error instanceof z.ZodError) {
+        return {
+          success: false,
+          message: error?.message ?? "Invalid owner details data"
+        }
+      }
+      return {
+        success: false,
+        message: error?.message ?? "Internal Server Error",
+      }
+    }
+  }
 }

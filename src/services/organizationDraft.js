@@ -7,3 +7,15 @@ export async function saveOrganizationIdentity(values, draftId) {
 
   return window.api.organizationDraft.saveOrganisationIdentity({ draftId, name, industry, logo })
 }
+
+export async function saveOwnerDetails(values, draftId) {
+  const { ownerName, countryCode, mobileNumber, email } = values
+
+  return window.api.organizationDraft.saveOwnerDetails({
+    draftId,
+    ownerName,
+    countryCode,
+    mobileNumber,
+    email,
+  })
+}
