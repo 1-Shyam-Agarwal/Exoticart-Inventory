@@ -37,6 +37,11 @@ app.whenReady().then(() => {
     (_event, data) => new OrganizationDraftController().saveBusinessDetails({ data })
   )
 
+  ipcMain.handle(
+    'organization-draft:save-bank-details',
+    (_event, data) => new OrganizationDraftController().saveBankDetails({ data })
+  )
+
   createWindow()
 
   app.on('activate', () => {

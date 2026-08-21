@@ -47,3 +47,20 @@ export async function saveBusinessDetails(values, draftId) {
     gst,
   })
 }
+
+export async function saveBankDetails(values, draftId) {
+  const { accountHolderName, bankName, accountNumber, ifscCode, accountType, upiId, qrFile } = values
+
+  const qr = await TransferableFile(qrFile)
+
+  return window.api.organizationDraft.saveBankDetails({
+    draftId,
+    accountHolderName,
+    bankName,
+    accountNumber,
+    ifscCode,
+    accountType,
+    upiId,
+    qr,
+  })
+}

@@ -138,4 +138,37 @@ export default class OrganizationDraftController {
       }
     }
   }
+
+  async saveBankDetails({ data }) {
+    try {
+      const qrPath = FileStorageService.saveQrCode(data.qr) ?? undefined
+      const fields = OrganizationDraftValidator.validateBankDetails({
+        accountHolderName: data.accountHolderName,
+        bankName: data.bankName,
+        accountNumber: data.accountNumber,
+        ifscCode: data.ifscCode,
+        accountType: data.accountType,
+        upiId: data.upiId,
+      })
+
+      let draftId = data?.draftId
+
+      const updated = await this.draftService.saveBankDetails(draftId, fields, qrPath)
+
+      return { success: true, draft: updated }
+
+    } catch (error) {
+
+      if (error instanceof z.ZodError) {
+        return {
+          success: false,
+          message: error?.message ?? "Invalid bank details data"
+        }
+      }
+      return {
+        success: false,
+        message: error?.message ?? "Internal Server Error",
+      }
+    }
+  }
 }

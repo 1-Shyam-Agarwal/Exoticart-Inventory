@@ -4,7 +4,7 @@ import { steps, stepSchemas } from "../components/setupOrganisation/constants"
 import { defaultValues } from "../components/setupOrganisation/defaultValues"
 import { validateStep } from "../components/setupOrganisation/validateStep"
 import { createOrganization } from "../services/organization"
-import { saveOrganizationIdentity, saveOwnerDetails, saveLocation, saveBusinessDetails } from "../services/organizationDraft"
+import { saveOrganizationIdentity, saveOwnerDetails, saveLocation, saveBusinessDetails, saveBankDetails } from "../services/organizationDraft"
 
 export { steps }
 
@@ -129,6 +129,29 @@ export function useMultiStepForm() {
         setError("root", {
           type: "server",
           message: error.message ?? "Failed to save business details",
+        })
+        return
+      } finally {
+        setIsSavingStep(false)
+      }
+    } else if (currentStep === 4) {
+      setIsSavingStep(true)
+      try {
+        const response = await saveBankDetails(getValues(), draftId)
+
+        if (response?.success === false) {
+          setError("root", {
+            type: "server",
+            message: response.message ?? "Failed to save bank details",
+          })
+          return
+        }
+
+        setDraftId(response.draft.id)
+      } catch (error) {
+        setError("root", {
+          type: "server",
+          message: error.message ?? "Failed to save bank details",
         })
         return
       } finally {
