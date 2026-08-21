@@ -1,4 +1,4 @@
-import { app, BrowserWindow , ipcMain } from "electron"
+import { app, BrowserWindow , ipcMain} from "electron"
 import path from "node:path"
 import OrganizationDraftController from "./controllers/organizationDraftController.js"
 
@@ -16,6 +16,11 @@ const createWindow = () => {
 }
 
 app.whenReady().then(() => {
+
+  ipcMain.handle(
+    'organization-draft:list',
+    () => new OrganizationDraftController().list()
+  )
 
   ipcMain.handle(
     'organization-draft:save-organisation-identity',

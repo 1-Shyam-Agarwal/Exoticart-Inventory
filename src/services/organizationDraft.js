@@ -1,5 +1,9 @@
 import { TransferableFile } from "../utils/transferableFile"
 
+export async function listOrganizationDrafts() {
+  return window.api.organizationDraft.list()
+}
+
 export async function saveOrganizationIdentity(values, draftId) {
   const { name, industry, logoFile } = values
 

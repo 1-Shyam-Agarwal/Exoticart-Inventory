@@ -7,6 +7,12 @@ export default class OrganizationDraftService {
     })
   }
 
+  async list() {
+    return prisma.organizationDraft.findMany({
+      orderBy: { updatedAt: "desc" },
+    })
+  }
+
   async saveOrganisationIdentity(draftId, fields, logoPath) {
     const existing = await prisma.organizationDraft.findUniqueOrThrow({
       where: { id: draftId },

@@ -7,10 +7,10 @@ import { SampleAppCard } from '../../molecules/showOrganisation/SampleAppCard';
 
 export function SampleAppsSection() {
   return (
-    <Box component="section" sx={{ mt: 8 , mx: 2.5}}>
+    <Box component="section" sx={{ mt: 4 }}>
       <Typography
         variant="subtitle2"
-        sx={{ mb: 1.5, fontWeight: 400 }}
+        sx={{ mb: 1.5, fontWeight: 500 }}
       >
         Try out a sample app
       </Typography>

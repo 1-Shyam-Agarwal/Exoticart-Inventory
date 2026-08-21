@@ -11,23 +11,19 @@ export function WelcomeSection() {
   const greeting = getGreeting(new Date().getHours());
 
   return (
-    <Box 
-        component="section" 
+    <Box
+        component="section"
         aria-labelledby="welcome-heading"
-        sx={{
-            padding: '2.1rem',
-            paddingLeft: '4.2rem',
-        }}
     >
       <Typography
         id="welcome-heading"
         variant="h4"
         sx={{
           fontFamily: 'typography.main',
-          fontWeight: 500,
-          letterSpacing: '0.005em',
+          fontWeight: 600,
+          letterSpacing: '-0.02em',
           fontSize: { xs: '1.875rem', sm: '2.25rem' },
-          background: 'linear-gradient(to right, #e11d48 0%, #f97316 10%, #eab308 60%, #eab308 100%)',
+          background: 'linear-gradient(to right, #DD2C00 0%, #FF9100 50%, #FFC400 100%)',
           backgroundClip: 'text',
           color: 'transparent',
         }}

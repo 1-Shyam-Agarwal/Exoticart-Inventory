@@ -27,10 +27,10 @@ export function SampleAppCard({ description, icon: Icon, title }) {
         spacing={2.5}
         sx={{ alignItems: 'center' }}
       >
-        {Icon ? <Icon sx={{ fontSize: 36 , color: 'orange' }} /> : null}
+        {Icon ? <Icon sx={{ fontSize: 36 , color: '#FF9100' }} /> : null}
 
         <Stack spacing={0.5} sx={{ alignItems: 'flex-start' }}>
-          <Typography variant="body1" sx={{ fontWeight: 400, color: 'text.primary' }}>
+          <Typography variant="body1" sx={{ fontWeight: 500, color: 'text.primary' }}>
             {title}
           </Typography>
           <Typography

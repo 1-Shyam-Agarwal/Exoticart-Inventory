@@ -17,28 +17,30 @@ function AppHeader() {
                 bgcolor: "background.main",
                 backgroundImage: "none",
                 boxShadow: "none",
-                padding: "0.8rem",
+                height: 64,
+                justifyContent: 'center',
+                px: { xs: 2, sm: 4, lg: 4 },
             }}
         >
-            <Stack 
-                direction="row" 
+            <Stack
+                direction="row"
                 spacing={1}
                 sx={{
                     justifyContent: 'space-between',
                     alignItems: 'center',
                 }}
             >
-                <Container disableGutters>
-                    <Stack direction="row" spacing={1}>
+                <Container disableGutters maxWidth={false} sx={{ width: 'auto', m: 0, p: 0 }}>
+                    <Stack direction="row" spacing={1} sx={{ alignItems: 'center' }}>
                         <img src={logo} alt="logo" className="size-10 object-contain"/>
-                        <Typography     
-                            variant="h2" 
-                            sx={{ 
+                        <Typography
+                            variant="h2"
+                            sx={{
                                 fontFamily: 'typography.main',
-                                fontSize: '1rem', 
+                                fontSize: '1rem',
                                 fontWeight: 400,
-                                letterSpacing: '0.05rem',
-                                color: 'primary.main',
+                                letterSpacing: '0.0625rem',
+                                color: 'text.secondary',
                                 alignSelf: 'center',
                             }}
 
@@ -48,7 +50,16 @@ function AppHeader() {
                     </Stack>
                 </Container>
 
-                <Button variant="text" >
+                <Button
+                    variant="text"
+                    sx={{
+                        minWidth: 0,
+                        width: 40,
+                        height: 40,
+                        borderRadius: '50%',
+                        p: 0,
+                    }}
+                >
                         <DarkModeOutlinedIcon sx={{ color: 'text.primary' , fontSize: '1.5rem'}} />
                 </Button>
             </Stack>

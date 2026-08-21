@@ -9,10 +9,10 @@ export function CreateOrganizationCard() {
   const navigate = useNavigate();
 
   return (
-    <Box sx={{ mt: 0.5, mx: 2.5 }}>
+    <Box sx={{ mt: 4 }}>
       <Typography
         variant="subtitle2"
-        sx={{ mb: 1.5, fontWeight: 400 }}
+        sx={{ mb: 1.5, fontWeight: 500 }}
       >
         Get started
       </Typography>
@@ -36,7 +36,7 @@ export function CreateOrganizationCard() {
       >
         <Stack
           direction="row"
-          spacing={2}
+          spacing={2.5}
           sx={{
             alignItems: 'center',
           }}
