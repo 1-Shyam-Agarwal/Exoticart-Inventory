@@ -8,14 +8,31 @@ import { saveOrganizationIdentity, saveOwnerDetails, saveLocation, saveBusinessD
 
 export { steps }
 
-export function useMultiStepForm() {
-  const [currentStep, setCurrentStep] = useState(0)
+function getResumeStep(initialDraft) {
+  if (!initialDraft) return 0
+  return Math.min(steps.length - 1, Math.max(0, (initialDraft.currentStep ?? 1) - 1))
+}
+
+function getResumeValues(initialDraft) {
+  if (!initialDraft?.data) return defaultValues
+
+  const merged = { ...defaultValues, ...initialDraft.data }
+
+  if (initialDraft.data.inventoryStartDate) {
+    merged.inventoryStartDate = new Date(initialDraft.data.inventoryStartDate)
+  }
+
+  return merged
+}
+
+export function useMultiStepForm(initialDraft = null) {
+  const [currentStep, setCurrentStep] = useState(() => getResumeStep(initialDraft))
   const [isSubmitted, setIsSubmitted] = useState(false)
-  const [draftId, setDraftId] = useState(null)
+  const [draftId, setDraftId] = useState(initialDraft?.id ?? null)
   const [isSavingStep, setIsSavingStep] = useState(false)
 
   const form = useForm({
-    defaultValues,
+    defaultValues: getResumeValues(initialDraft),
     mode: "onChange",
     reValidateMode: "onChange",
   })

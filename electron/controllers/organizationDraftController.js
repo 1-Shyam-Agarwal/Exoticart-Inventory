@@ -8,6 +8,19 @@ export default class OrganizationDraftController {
     this.draftService = draftService
   }
 
+  async list() {
+    try {
+      const drafts = await this.draftService.list()
+
+      return { success: true, drafts }
+    } catch (error) {
+      return {
+        success: false,
+        message: error?.message ?? "Internal Server Error",
+      }
+    }
+  }
+
   async saveOrganisationIdentity({ data }) {
     try {
       const logoPath = FileStorageService.saveLogo(data.logo) ?? undefined

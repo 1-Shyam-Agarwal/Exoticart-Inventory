@@ -1,6 +1,22 @@
-import { app, BrowserWindow , ipcMain } from "electron"
+import { app, BrowserWindow , ipcMain, protocol, net } from "electron"
 import path from "node:path"
+import { pathToFileURL } from "node:url"
 import OrganizationDraftController from "./controllers/organizationDraftController.js"
+
+// Not `standard`: an absolute Windows path (drive letter + backslashes) doesn't
+// survive authority/host URL parsing intact (case-folding, backslash handling).
+// Keeping this scheme opaque (no "//") preserves the encoded path byte-for-byte.
+protocol.registerSchemesAsPrivileged([
+  {
+    scheme: "local-resource",
+    privileges: {
+      secure: true,
+      supportFetchAPI: true,
+      corsEnabled: true,
+      bypassCSP: true,
+    },
+  },
+])
 
 const createWindow = () => {
   const win = new BrowserWindow({
@@ -16,6 +32,16 @@ const createWindow = () => {
 }
 
 app.whenReady().then(() => {
+
+  protocol.handle("local-resource", (request) => {
+    const filePath = decodeURIComponent(request.url.slice("local-resource:".length))
+    return net.fetch(pathToFileURL(filePath).toString())
+  })
+
+  ipcMain.handle(
+    'organization-draft:list',
+    () => new OrganizationDraftController().list()
+  )
 
   ipcMain.handle(
     'organization-draft:save-organisation-identity',
