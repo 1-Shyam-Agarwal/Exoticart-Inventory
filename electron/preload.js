@@ -1,8 +1,18 @@
 import  { contextBridge , ipcRenderer } from 'electron'
 
 contextBridge.exposeInMainWorld("api", {
-    organization: {
-        store: (data) =>
-            ipcRenderer.invoke("organization:store", data)
+    organizationDraft: {
+        list: () =>
+            ipcRenderer.invoke("organization-draft:list"),
+        saveOrganisationIdentity: (data) =>
+            ipcRenderer.invoke("organization-draft:save-organisation-identity", data),
+        saveOwnerDetails: (data) =>
+            ipcRenderer.invoke("organization-draft:save-owner-details", data),
+        saveLocation: (data) =>
+            ipcRenderer.invoke("organization-draft:save-location", data),
+        saveBusinessDetails: (data) =>
+            ipcRenderer.invoke("organization-draft:save-business-details", data),
+        saveBankDetails: (data) =>
+            ipcRenderer.invoke("organization-draft:save-bank-details", data)
     }
 })

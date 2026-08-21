@@ -4,6 +4,10 @@ import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
+import {
+  QueryClient,
+  QueryClientProvider,
+} from "@tanstack/react-query";
 import './index.css'
 import App from './App.jsx'
 import CssBaseline from '@mui/material/CssBaseline';
@@ -11,12 +15,16 @@ import { ThemeProvider } from '@mui/material/styles';
 import { theme } from './theme.js';
 import { BrowserRouter } from 'react-router-dom';
 
+const queryClient = new QueryClient();
+
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <BrowserRouter> 
       <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <App />
+        <QueryClientProvider client={queryClient}>
+          <CssBaseline />
+          <App />
+        </QueryClientProvider>
       </ThemeProvider>
     </BrowserRouter>
   </StrictMode>,

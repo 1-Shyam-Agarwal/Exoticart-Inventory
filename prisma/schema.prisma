@@ -13,7 +13,7 @@ datasource db {
 }
 
 model Organization {
-  id       Int    @id @default(autoincrement())
+  id Int @id @default(autoincrement())
 
   name     String
   industry String
@@ -24,8 +24,8 @@ model Organization {
 
   inventoryStartDate DateTime
   fiscalYear         String
-  pan                String? @unique
-  gst                String? @unique
+  pan                String?  @unique
+  gst                String?  @unique
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -36,7 +36,7 @@ model Organization {
 }
 
 model OrganizationContact {
-  id             Int    @id @default(autoincrement())
+  id             Int     @id @default(autoincrement())
   organizationId Int
   name           String
   position       String
@@ -45,15 +45,15 @@ model OrganizationContact {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  organization Organization                @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   numbers      OrganizationContactNumber[]
   emails       OrganizationContactEmail[]
 }
 
 model OrganizationContactNumber {
-  id           Int    @id @default(autoincrement())
+  id           Int     @id @default(autoincrement())
   contactId    Int
-  countryCode  String @default("+91")
+  countryCode  String  @default("+91")
   mobileNumber String
   isPrimary    Boolean @default(false)
 
@@ -64,7 +64,7 @@ model OrganizationContactNumber {
 }
 
 model OrganizationContactEmail {
-  id        Int    @id @default(autoincrement())
+  id        Int     @id @default(autoincrement())
   contactId Int
   email     String
   isPrimary Boolean @default(false)
@@ -76,7 +76,7 @@ model OrganizationContactEmail {
 }
 
 model OrganizationAddress {
-  id             Int    @id @default(autoincrement())
+  id             Int @id @default(autoincrement())
   organizationId Int
 
   name        String
@@ -98,7 +98,7 @@ model OrganizationAddress {
 }
 
 model OrganizationBankDetail {
-  id             Int    @id @default(autoincrement())
+  id             Int @id @default(autoincrement())
   organizationId Int
 
   accountHolderName String
@@ -116,4 +116,16 @@ model OrganizationBankDetail {
   updatedAt DateTime @updatedAt
 
   organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+}
+
+model OrganizationDraft {
+  id          Int  @id @default(autoincrement())
+  currentStep Int  @default(1)
+  data        Json
+
+  logoPath String?
+  qrPath   String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

@@ -1,5 +1,6 @@
 import * as React from "react"
 import { FormProvider } from "react-hook-form"
+import { useLocation } from "react-router-dom"
 import Box from "@mui/material/Box"
 import { useMultiStepForm } from "../../hooks/useMultiStepForm"
 import { steps } from "./constants"
@@ -33,12 +34,14 @@ function getStepContent(step, { onEditStep }) {
 }
 
 export default function SetupOrganisation() {
-  const form = useMultiStepForm()
+  const location = useLocation()
+  const form = useMultiStepForm(location.state?.draft ?? null)
   const {
     currentStep,
     isFirstStep,
     isLastStep,
     isSubmitting,
+    isSavingStep,
     errors,
     goToNextStep,
     goToPreviousStep,
@@ -106,6 +109,7 @@ export default function SetupOrganisation() {
                 isFirstStep={isFirstStep}
                 isLastStep={isLastStep}
                 isSubmitting={isSubmitting}
+                isSavingStep={isSavingStep}
                 onBack={handleBack}
                 onContinue={handleNext}
                 submitError={errors.root?.message}

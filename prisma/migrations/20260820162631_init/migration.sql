@@ -82,7 +82,7 @@ CREATE TABLE "OrganizationBankDetail" (
     "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" DATETIME NOT NULL,
     CONSTRAINT "OrganizationBankDetail_organizationId_fkey" FOREIGN KEY ("organizationId") REFERENCES "Organization" ("id") ON DELETE CASCADE ON UPDATE CASCADE
-);
+);  
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Organization_pan_key" ON "Organization"("pan");
