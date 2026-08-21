@@ -1,0 +1,47 @@
+import { z } from "zod"
+import OrganizationDraftService from "../services/organizationDraftService.js"
+import OrganizationDraftValidator from "../validators/organizationDraftValidator.js"
+import FileStorageService from "../services/fileStorageService.js"
+
+export default class OrganizationDraftController {
+  constructor(draftService = new OrganizationDraftService()) {
+    this.draftService = draftService
+  }
+
+  async saveOrganisationIdentity({ data }) {
+    try {
+      const logoPath = FileStorageService.saveLogo(data.logo) ?? undefined
+      const fields = OrganizationDraftValidator.validateOrganisationIdentity({
+        name: data.name,
+        industry: data.industry,
+      })
+
+      //Service Layer
+      const isDraftIdPresent = Boolean(data?.draftId)
+      let draftId = data?.draftId
+
+      if(!isDraftIdPresent){
+        const newOrg = await this.draftService.createOrgDraft()
+        draftId = newOrg.id
+      }
+
+      const updated = await this.draftService.saveOrganisationIdentity(draftId, fields, logoPath)
+
+      //Serialiser Layer
+      return { success: true, draft: updated }
+
+    } catch (error) {
+      console.log("Error : " , error.message)
+      if (error instanceof z.ZodError) {
+        return { 
+          success: false, 
+          message: error?.message ?? "Invalid organization identity data" 
+        }
+      }
+      return {
+        success:false,
+        message: error?.message ?? "Internal Server Error",
+      }
+    }
+  }
+}

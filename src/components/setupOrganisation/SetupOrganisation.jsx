@@ -39,6 +39,7 @@ export default function SetupOrganisation() {
     isFirstStep,
     isLastStep,
     isSubmitting,
+    isSavingStep,
     errors,
     goToNextStep,
     goToPreviousStep,
@@ -106,6 +107,7 @@ export default function SetupOrganisation() {
                 isFirstStep={isFirstStep}
                 isLastStep={isLastStep}
                 isSubmitting={isSubmitting}
+                isSavingStep={isSavingStep}
                 onBack={handleBack}
                 onContinue={handleNext}
                 submitError={errors.root?.message}

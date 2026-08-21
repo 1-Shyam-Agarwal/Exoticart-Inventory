@@ -3,13 +3,16 @@ import { useForm } from "react-hook-form"
 import { steps, stepSchemas } from "../components/setupOrganisation/constants"
 import { defaultValues } from "../components/setupOrganisation/defaultValues"
 import { validateStep } from "../components/setupOrganisation/validateStep"
-import { createOrganization } from "../services/organizationApi"
+import { createOrganization } from "../services/organization"
+import { saveOrganizationIdentity } from "../services/organizationDraft"
 
 export { steps }
 
 export function useMultiStepForm() {
   const [currentStep, setCurrentStep] = useState(0)
   const [isSubmitted, setIsSubmitted] = useState(false)
+  const [draftId, setDraftId] = useState(null)
+  const [isSavingStep, setIsSavingStep] = useState(false)
 
   const form = useForm({
     defaultValues,
@@ -30,14 +33,40 @@ export function useMultiStepForm() {
   const isFirstStep = currentStep === 0
   const isLastStep = currentStep === steps.length - 1
 
-  const goToNextStep = () => {
+  const goToNextStep = async () => {
     const result = validateStep(currentStep, getValues(), setError, clearErrors)
 
     if (!result.success || isLastStep) {
       return
     }
 
-    console.log("Form data:", getValues())
+    if (currentStep === 0) {
+      setIsSavingStep(true)
+      try {
+        const response = await saveOrganizationIdentity(getValues(), draftId)
+
+        if (response?.success === false) {
+          setError("root", {
+            type: "server",
+            message: response.message ?? "Failed to save organization identity",
+          })
+          return
+        }
+
+        console.log("response : draft : id " ,response.draft.id );
+
+        setDraftId(response.draft.id)
+      } catch (error) {
+        setError("root", {
+          type: "server",
+          message: error.message ?? "Failed to save organization identity",
+        })
+        return
+      } finally {
+        setIsSavingStep(false)
+      }
+    }
+
     setCurrentStep((prev) => prev + 1)
   }
 
@@ -102,6 +131,7 @@ export function useMultiStepForm() {
     errors,
     isSubmitting,
     isSubmitted,
+    isSavingStep,
 
     goToNextStep,
     goToPreviousStep,

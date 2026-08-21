@@ -4,6 +4,7 @@ import currencies from "../data/currency.json"
 import states from "../data/state.json"
 import timezones from "../data/timezone.json"
 import fiscalYears from "../data/fiscalYear.json"
+import { organizationIdentitySchema as sharedOrganizationIdentitySchema } from "../../shared/validation/organizationIdentitySchema"
 
 const emptyToUndefined = (value) =>
   value === "" || value == null ? undefined : value
@@ -11,13 +12,7 @@ const emptyToUndefined = (value) =>
 const optionalTrimmedString = (schema) =>
   z.preprocess(emptyToUndefined, schema.optional())
 
-export const organizationIdentitySchema = z.object({
-  name: z
-    .string()
-    .trim()
-    .min(2, "Organization name must be at least 2 characters")
-    .max(150, "Organization name must be 150 characters or fewer"),
-  industry: z.string().min(1, "Industry is required"),
+export const organizationIdentitySchema = sharedOrganizationIdentitySchema.extend({
   logoFile: z
     .file()
     .min(1000, "Logo file must be at least 1Kb")

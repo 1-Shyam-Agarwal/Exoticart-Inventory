@@ -8,6 +8,7 @@ export default function FormNavActions({
   isFirstStep,
   isLastStep,
   isSubmitting,
+  isSavingStep,
   onBack,
   onContinue,
   submitError,
@@ -62,7 +63,7 @@ export default function FormNavActions({
           <Button
             type="button"
             variant="contained"
-            disabled={isSubmitting}
+            disabled={isSubmitting || isSavingStep}
             onClick={onContinue}
             sx={primaryButtonSx}
           >

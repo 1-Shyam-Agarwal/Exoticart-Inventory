@@ -1,6 +1,6 @@
 import { app, BrowserWindow , ipcMain } from "electron"
 import path from "node:path"
-import { initDb } from "./db/index.js"
+import OrganizationDraftController from "./controllers/organizationDraftController.js"
 
 const createWindow = () => {
   const win = new BrowserWindow({
@@ -16,13 +16,12 @@ const createWindow = () => {
 }
 
 app.whenReady().then(() => {
-  
+
   ipcMain.handle(
-    'organisation:store',
-    (_event, data) => OrganisationController.store(data)
+    'organization-draft:save-organisation-identity',
+    (_event, data) => new OrganizationDraftController().saveOrganisationIdentity({ data })
   )
 
-  initDb()
   createWindow()
 
   app.on('activate', () => {
