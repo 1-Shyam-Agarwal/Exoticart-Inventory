@@ -1,0 +1,87 @@
+import { prisma } from "../../lib/prisma.js"
+
+export default class OrganizationDraftService {
+  async createOrgDraft() {
+    return prisma.organizationDraft.create({
+      data: { currentStep: 1, data: {} },
+    })
+  }
+
+  async list() {
+    return prisma.organizationDraft.findMany({
+      orderBy: { updatedAt: "desc" },
+    })
+  }
+
+  async saveOrganisationIdentity(draftId, fields, logoPath) {
+    const existing = await prisma.organizationDraft.findUniqueOrThrow({
+      where: { id: draftId },
+    })
+
+    return prisma.organizationDraft.update({
+      where: { id: draftId },
+      data: {
+        data: { ...existing.data, ...fields },
+        currentStep: 2,
+        ...(logoPath && { logoPath }),
+      },
+    })
+  }
+
+  async saveOwnerDetails(draftId, fields) {
+    const existing = await prisma.organizationDraft.findUniqueOrThrow({
+      where: { id: draftId },
+    })
+
+    return prisma.organizationDraft.update({
+      where: { id: draftId },
+      data: {
+        data: { ...existing.data, ...fields },
+        currentStep: 3,
+      },
+    })
+  }
+
+  async saveLocation(draftId, fields) {
+    const existing = await prisma.organizationDraft.findUniqueOrThrow({
+      where: { id: draftId },
+    })
+
+    return prisma.organizationDraft.update({
+      where: { id: draftId },
+      data: {
+        data: { ...existing.data, ...fields },
+        currentStep: 4,
+      },
+    })
+  }
+
+  async saveBusinessDetails(draftId, fields) {
+    const existing = await prisma.organizationDraft.findUniqueOrThrow({
+      where: { id: draftId },
+    })
+
+    return prisma.organizationDraft.update({
+      where: { id: draftId },
+      data: {
+        data: { ...existing.data, ...fields },
+        currentStep: 5,
+      },
+    })
+  }
+
+  async saveBankDetails(draftId, fields, qrPath) {
+    const existing = await prisma.organizationDraft.findUniqueOrThrow({
+      where: { id: draftId },
+    })
+
+    return prisma.organizationDraft.update({
+      where: { id: draftId },
+      data: {
+        data: { ...existing.data, ...fields },
+        currentStep: 6,
+        ...(qrPath && { qrPath }),
+      },
+    })
+  }
+}
