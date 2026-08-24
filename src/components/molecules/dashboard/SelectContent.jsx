@@ -3,13 +3,10 @@ import MuiAvatar from '@mui/material/Avatar';
 import MuiListItemAvatar from '@mui/material/ListItemAvatar';
 import MenuItem from '@mui/material/MenuItem';
 import ListItemText from '@mui/material/ListItemText';
-import ListItemIcon from '@mui/material/ListItemIcon';
 import ListSubheader from '@mui/material/ListSubheader';
 import Select, { selectClasses } from '@mui/material/Select';
-import Divider from '@mui/material/Divider';
 import { styled } from '@mui/material/styles';
 import ApartmentRoundedIcon from '@mui/icons-material/ApartmentRounded';
-import SwapHorizRoundedIcon from '@mui/icons-material/SwapHorizRounded';
 
 const Avatar = styled(MuiAvatar)(({ theme }) => ({
   width: 28,
@@ -24,12 +21,13 @@ const ListItemAvatar = styled(MuiListItemAvatar)({
   marginRight: 12,
 });
 
-export function SelectContent({ organizationName, industry }) {
+export function SelectContent({ organizations = [], currentOrgId }) {
   const navigate = useNavigate();
 
   function handleChange(event) {
-    if (event.target.value === 'switch') {
-      navigate('/');
+    const orgId = event.target.value;
+    if (String(orgId) !== String(currentOrgId)) {
+      navigate(`/org/active/${orgId}`);
     }
   }
 
@@ -37,7 +35,7 @@ export function SelectContent({ organizationName, industry }) {
     <Select
       labelId="organization-select"
       id="organization-simple-select"
-      value="current"
+      value={currentOrgId != null ? String(currentOrgId) : ''}
       onChange={handleChange}
       displayEmpty
       inputProps={{ 'aria-label': 'Select organization' }}
@@ -55,21 +53,16 @@ export function SelectContent({ organizationName, industry }) {
       }}
     >
       <ListSubheader sx={{ pt: 0 }}>Organization</ListSubheader>
-      <MenuItem value="current">
-        <ListItemAvatar>
-          <Avatar alt={organizationName}>
-            <ApartmentRoundedIcon sx={{ fontSize: '1rem' }} />
-          </Avatar>
-        </ListItemAvatar>
-        <ListItemText primary={organizationName || 'Loading…'} secondary={industry} />
-      </MenuItem>
-      <Divider sx={{ mx: -1 }} />
-      <MenuItem value="switch">
-        <ListItemIcon>
-          <SwapHorizRoundedIcon />
-        </ListItemIcon>
-        <ListItemText primary="Switch organization" />
-      </MenuItem>
+      {organizations.map((org) => (
+        <MenuItem key={org.id} value={String(org.id)}>
+          <ListItemAvatar>
+            <Avatar alt={org.name}>
+              <ApartmentRoundedIcon sx={{ fontSize: '1rem' }} />
+            </Avatar>
+          </ListItemAvatar>
+          <ListItemText primary={org.name} secondary={org.industry} />
+        </MenuItem>
+      ))}
     </Select>
   );
 }

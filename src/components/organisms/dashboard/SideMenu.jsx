@@ -22,7 +22,9 @@ const Drawer = styled(MuiDrawer)({
   },
 });
 
-export function SideMenu({ organizationName, industry }) {
+export function SideMenu({ organizations, currentOrgId }) {
+  const currentOrg = organizations?.find((org) => String(org.id) === String(currentOrgId));
+
   return (
     <Drawer
       variant="permanent"
@@ -35,30 +37,13 @@ export function SideMenu({ organizationName, industry }) {
       }}
     >
       <Box sx={{ display: 'flex', p: 1.5 }}>
-        <SelectContent organizationName={organizationName} industry={industry} />
+        <SelectContent organizations={organizations} currentOrgId={currentOrgId} />
       </Box>
       <Divider sx={{ borderColor: 'border.soft' }} />
       <Box sx={{ overflow: 'auto', height: '100%', display: 'flex', flexDirection: 'column' }}>
         <MenuContent />
         <CardAlert />
       </Box>
-      <Stack
-        direction="row"
-        sx={{ p: 2, gap: 1, alignItems: 'center', borderTop: '1px solid', borderColor: 'border.soft' }}
-      >
-        <Avatar sx={{ width: 36, height: 36, bgcolor: 'primary.main', color: 'primary.contrastText' }}>
-          IA
-        </Avatar>
-        <Box sx={{ mr: 'auto' }}>
-          <Typography variant="body2" sx={{ fontWeight: 500, lineHeight: '16px' }}>
-            Inventory Admin
-          </Typography>
-          <Typography variant="caption" sx={{ color: 'text.secondary' }}>
-            {organizationName || 'Organization'}
-          </Typography>
-        </Box>
-        <OptionsMenu />
-      </Stack>
     </Drawer>
   );
 }

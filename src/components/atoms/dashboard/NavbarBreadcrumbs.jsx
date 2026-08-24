@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import Breadcrumbs, { breadcrumbsClasses } from '@mui/material/Breadcrumbs';
@@ -14,18 +15,30 @@ const StyledBreadcrumbs = styled(Breadcrumbs)(({ theme }) => ({
   },
 }));
 
-export function NavbarBreadcrumbs({ organizationName }) {
+export function NavbarBreadcrumbs({ breadcrumbItems }) {
+  const navigate = useNavigate();
+
   return (
     <StyledBreadcrumbs
-      aria-label="breadcrumb"
+      sx={{ alignSelf: 'flex-start'}}
       separator={<NavigateNextRoundedIcon fontSize="small" />}
     >
-      <Typography variant="body1" sx={{ color: 'text.secondary' }}>
-        Inventory
-      </Typography>
-      <Typography variant="body1" sx={{ color: 'text.primary', fontWeight: 600 }}>
-        {organizationName || 'Dashboard'}
-      </Typography>
+      {
+        breadcrumbItems?.map((item)=>(
+          <Typography
+            key={item[1]}
+            variant="body1"
+            onClick={() => navigate(item[1])}
+            sx={{
+              color: 'text.secondary',
+              cursor: 'pointer',
+              '&:hover': { color: 'text.primary' },
+            }}
+          >
+            {item[0]}
+          </Typography>
+        ))
+      }
     </StyledBreadcrumbs>
   );
 }
