@@ -1,86 +1,94 @@
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
 import Chip from '@mui/material/Chip';
+import IconButton from '@mui/material/IconButton';
 import Stack from '@mui/material/Stack';
+import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutlineOutlined';
 import developerLogo from '../../../../public/assets/developer_logo.png';
 import { formatRelativeTime } from '../../../utils/formatRelativeTime';
 
-export function OrganizationListItem({ name, industry, status, logoSrc, updatedAt, onClick }) {
-  const isReady = status === 'ready';
-  const isClickable = Boolean(onClick);
-  const updatedLabel = updatedAt ? formatRelativeTime(updatedAt) : '';
+export const ORGANIZATION_ROW_HEIGHT = 75;
+
+export function OrganizationListItem({ name, industry, status, logoPath, updatedAt, onClick, onDelete }) {
+  const isReady = status === 'active';
+  const updatedLabel = formatRelativeTime(updatedAt) ;
 
   return (
     <Box
       onClick={onClick}
-      role={isClickable ? 'button' : undefined}
-      tabIndex={isClickable ? 0 : undefined}
-      onKeyDown={
-        isClickable
-          ? (event) => {
-              if (event.key === 'Enter' || event.key === ' ') {
-                event.preventDefault();
-                onClick(event);
-              }
-            }
-          : undefined
-      }
       sx={{
         borderBottom: '1px solid',
-        borderColor: 'border.soft',
-        '&:last-of-type': { borderBottom: 'none' },
+        borderColor: 'border.main',
         px: 2,
-        py: 1,
+        height: ORGANIZATION_ROW_HEIGHT,
+        boxSizing: 'border-box',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
         gap: 1.5,
-        cursor: isClickable ? 'pointer' : 'default',
-        '&:hover': isClickable ? { bgcolor: 'background.muted' } : undefined,
+        cursor: 'pointer',
+        '&:hover': {
+          bgcolor: 'background.muted',
+        }
       }}
     >
-      <Stack direction="row" spacing={1.5} sx={{ alignItems: 'center', minWidth: 0 }}>
+      <Stack direction="row" spacing={1.5} sx={{ alignItems: 'center'}}>
         <Avatar
-          src={logoSrc || developerLogo}
+          src={logoPath || developerLogo}
           alt={`${name} logo`}
           variant="rounded"
           sx={{
             width: 28,
             height: 28,
-            flexShrink: 0,
             bgcolor: 'background.muted',
             '& .MuiAvatar-img': { objectFit: 'contain' },
           }}
         />
 
-        <Stack spacing={0.25} sx={{ minWidth: 0 }}>
+        <Stack spacing={0.25}>
           <Typography variant="body2" noWrap sx={{ color: 'text.primary' }}>
             {name}
           </Typography>
-          {industry ? (
-            <Typography variant="caption" noWrap sx={{ color: 'text.secondary' }}>
-              {industry}
-            </Typography>
-          ) : null}
+          <Typography variant="caption" noWrap sx={{ color: 'text.secondary' }}>
+            {industry}
+          </Typography>
         </Stack>
       </Stack>
 
-      <Stack spacing={0.5} sx={{ alignItems: 'flex-end', flexShrink: 0 }}>
-        <Chip
-          label={isReady ? 'Ready' : 'Draft'}
-          size="small"
-          sx={{
-            fontWeight: 500,
-            bgcolor: isReady ? 'rgba(138, 180, 248, 0.16)' : 'background.muted',
-            color: isReady ? 'primary.main' : 'text.secondary',
-          }}
-        />
-        {updatedLabel ? (
+      <Stack direction="row" spacing={1} sx={{ alignItems: 'center'}}>
+        <Stack spacing={0.5} sx={{ alignItems: 'flex-end' }}>
+          <Chip
+            label={isReady ? 'Active' : 'Draft'}
+            size="small"
+            sx={{
+              height: 20,
+              fontSize: '0.6875rem',
+              fontWeight: 500,
+              bgcolor: isReady ? 'rgba(138, 180, 248, 0.16)' : 'background.muted',
+              color: isReady ? 'primary.main' : 'text.secondary',
+              '& .MuiChip-label': { px: 1 },
+            }}
+          />
           <Typography variant="caption" noWrap sx={{ color: 'text.secondary' }}>
             Updated {updatedLabel}
           </Typography>
-        ) : null}
+        </Stack>
+
+          <Tooltip title="Delete">
+            <IconButton
+              size="small"
+              onClick={(event) => {
+                event.stopPropagation();
+                onDelete();
+              }}
+              sx={{ color: 'error.main' }}
+            >
+              <DeleteOutlineIcon fontSize="small" />
+            </IconButton>
+          </Tooltip>
+        
       </Stack>
     </Box>
   );

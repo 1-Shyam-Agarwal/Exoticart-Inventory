@@ -4,7 +4,7 @@ import Tabs from '@mui/material/Tabs';
 const TABS = [
   { value: 'all', label: 'All' },
   { value: 'draft', label: 'Draft' },
-  { value: 'ready', label: 'Ready' },
+  { value: 'active', label: 'Active' },
 ];
 
 export function OrganizationsTabs({ value, onChange, counts }) {
@@ -12,13 +12,10 @@ export function OrganizationsTabs({ value, onChange, counts }) {
     <Tabs
       value={value}
       onChange={(_event, newValue) => onChange(newValue)}
-      aria-label="organizations tabs"
-      TabIndicatorProps={{ sx: { display: 'none' } }}
       sx={{
         minHeight: 'auto',
         p: 0.5,
-        '& .MuiTabs-indicator': { display: 'none' },
-        '& .MuiTabs-flexContainer': { gap: 0.5 },
+        '& .MuiTabs-indicator': { display: 'none' }
       }}
     >
       {TABS.map((tab) => {

@@ -3,9 +3,13 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import GridOnOutlinedIcon from '@mui/icons-material/GridOnOutlined';
 import AutoAwesomeOutlinedIcon from '@mui/icons-material/AutoAwesomeOutlined';
-import { SampleAppCard } from '../../molecules/showOrganisation/SampleAppCard';
+import { ActionCard } from '../../molecules/showOrganisation/ActionCard';
+import { useNavigate } from 'react-router-dom';
 
 export function SampleAppsSection() {
+
+  const navigate = useNavigate()
+  
   return (
     <Box component="section" sx={{ mt: 4 }}>
       <Typography
@@ -16,15 +20,19 @@ export function SampleAppsSection() {
       </Typography>
 
       <Stack spacing={1.5}>
-        <SampleAppCard
+        <ActionCard
           title="Import Existing Inventory"
           description="Import products and stock using CSV or Excel templates."
           icon={GridOnOutlinedIcon}
+          bgColor='border.paper'
+          onClickHandler={() => navigate('/org/setup')}
         />
-        <SampleAppCard
+        <ActionCard
           title="Explore Demo Organization"
           description="Browse a preconfigured organization to understand Smart Inventory."
           icon={AutoAwesomeOutlinedIcon}
+          bgColor = 'border.paper'
+          onClickHandler={() => navigate('/org/setup')}
         />
       </Stack>
     </Box>

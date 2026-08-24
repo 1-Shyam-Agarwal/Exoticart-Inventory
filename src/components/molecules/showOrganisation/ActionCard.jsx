@@ -1,20 +1,26 @@
-import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
 
-export function SampleAppCard({ description, icon: Icon, title }) {
+export function ActionCard({ 
+  description, 
+  icon: Icon, 
+  title , 
+  image : Image,
+  onClickHandler,
+  bgColor
+}) {
   return (
     <Button
-      type="button"
       variant="outlined"
+      onClick={onClickHandler}
       fullWidth
       sx={{
         p: 2.5,
         textTransform: 'none',
         justifyContent: 'flex-start',
-        whiteSpace: 'normal',
-        bgcolor: 'background.main',
+        bgcolor: bgColor,
         borderColor: 'border.soft',
         '&:hover': {
           borderColor: 'border.main',
@@ -27,10 +33,20 @@ export function SampleAppCard({ description, icon: Icon, title }) {
         spacing={2.5}
         sx={{ alignItems: 'center' }}
       >
-        {Icon ? <Icon sx={{ fontSize: 36 , color: '#FF9100' }} /> : null}
+        {Icon && <Icon sx={{ fontSize: 36 , color: '#FF9100' }} />}
+        {   
+            Image 
+            && 
+            <Box
+                component="img"
+                src={Image}
+                alt="Unable to load image"
+                sx={{ width: 40, height: 56, objectFit: 'contain' }}
+            />
+        }
 
         <Stack spacing={0.5} sx={{ alignItems: 'flex-start' }}>
-          <Typography variant="body1" sx={{ fontWeight: 500, color: 'text.primary' }}>
+          <Typography variant="body1" sx={{ fontWeight: 400, color: 'text.primary' }}>
             {title}
           </Typography>
           <Typography

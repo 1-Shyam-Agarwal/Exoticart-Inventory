@@ -13,19 +13,16 @@ export async function saveOrganizationIdentity(values, draftId) {
 }
 
 export async function saveOwnerDetails(values, draftId) {
-  const { ownerName, countryCode, mobileNumber, email } = values
+  const { owners } = values
 
   return window.api.organizationDraft.saveOwnerDetails({
     draftId,
-    ownerName,
-    countryCode,
-    mobileNumber,
-    email,
+    owners,
   })
 }
 
 export async function saveLocation(values, draftId) {
-  const { country, state, currency, timezone, street1, street2, city, postalCode } = values
+  const { country, state, currency, timezone } = values
 
   return window.api.organizationDraft.saveLocation({
     draftId,
@@ -33,10 +30,6 @@ export async function saveLocation(values, draftId) {
     state,
     currency,
     timezone,
-    street1,
-    street2,
-    city,
-    postalCode,
   })
 }
 
@@ -53,18 +46,29 @@ export async function saveBusinessDetails(values, draftId) {
 }
 
 export async function saveBankDetails(values, draftId) {
-  const { accountHolderName, bankName, accountNumber, ifscCode, accountType, upiId, qrFile } = values
+  const { bankAccounts } = values
 
-  const qr = await TransferableFile(qrFile)
+  const preparedAccounts = await Promise.all(
+    (bankAccounts || []).map(async (account) => {
+      const rest = { ...account }
+      delete rest.qrFile
+      delete rest.qrPreview
+
+      const qr = await TransferableFile(account.qrFile)
+      return { ...rest, qr }
+    }),
+  )
 
   return window.api.organizationDraft.saveBankDetails({
     draftId,
-    accountHolderName,
-    bankName,
-    accountNumber,
-    ifscCode,
-    accountType,
-    upiId,
-    qr,
+    bankAccounts: preparedAccounts,
   })
+}
+
+export async function finalizeOrganizationDraft(draftId) {
+  return window.api.organizationDraft.finalize({ draftId })
+}
+
+export async function deleteOrganizationDraft(draftId) {
+  return window.api.organizationDraft.delete({ draftId })
 }

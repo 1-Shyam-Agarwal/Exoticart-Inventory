@@ -6,7 +6,6 @@ export function OrganizationsSearchBar({ value, onChange }) {
   return (
     <TextField
       fullWidth
-      size="small"
       value={value}
       onChange={(event) => onChange(event.target.value)}
       placeholder="Search organizations"
@@ -18,15 +17,13 @@ export function OrganizationsSearchBar({ value, onChange }) {
             </InputAdornment>
           ),
           sx: {
-            bgcolor: 'background.paper',
-            borderRadius: '0.75rem',
+            borderRadius: '0.5rem',
             fontSize: '0.875rem',
             height: 44,
           },
         },
       }}
       sx={{
-        '& .MuiOutlinedInput-notchedOutline': { borderColor: 'border.soft' },
         '&:hover .MuiOutlinedInput-notchedOutline': { borderColor: 'border.main' },
       }}
     />

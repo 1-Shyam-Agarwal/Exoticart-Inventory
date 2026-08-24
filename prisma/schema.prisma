@@ -22,16 +22,18 @@ model Organization {
   currency String
   timezone String
 
+  country String
+  state   String
+
   inventoryStartDate DateTime
   fiscalYear         String
-  pan                String?  @unique
-  gst                String?  @unique
+  pan                String?  
+  gst                String?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   contacts    OrganizationContact[]
-  addresses   OrganizationAddress[]
   bankDetails OrganizationBankDetail[]
 }
 
@@ -75,28 +77,6 @@ model OrganizationContactEmail {
   contact OrganizationContact @relation(fields: [contactId], references: [id], onDelete: Cascade)
 }
 
-model OrganizationAddress {
-  id             Int @id @default(autoincrement())
-  organizationId Int
-
-  name        String
-  addressType String
-
-  country    String
-  state      String
-  city       String?
-  street1    String?
-  street2    String?
-  postalCode String?
-
-  isPrimary Boolean @default(false)
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-}
-
 model OrganizationBankDetail {
   id             Int @id @default(autoincrement())
   organizationId Int
@@ -124,7 +104,6 @@ model OrganizationDraft {
   data        Json
 
   logoPath String?
-  qrPath   String?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

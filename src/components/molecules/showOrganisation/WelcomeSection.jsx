@@ -13,11 +13,8 @@ export function WelcomeSection() {
   return (
     <Box
         component="section"
-        aria-labelledby="welcome-heading"
     >
       <Typography
-        id="welcome-heading"
-        variant="h4"
         sx={{
           fontFamily: 'typography.main',
           fontWeight: 600,

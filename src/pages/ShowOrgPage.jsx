@@ -1,13 +1,13 @@
 import Box from '@mui/material/Box';
 import AppHeader from '../components/molecules/showOrganisation/AppHeader';
 import { WelcomeSection } from '../components/molecules/showOrganisation/WelcomeSection';
-import { CreateOrganizationCard } from '../components/molecules/showOrganisation/CreateOrgCard';
+import { CreateOrgSection } from '../components/organisms/showOrganisation/CreateOrgSection';
 import { SampleAppsSection } from '../components/organisms/showOrganisation/SampleAppSection';
 import { ShowOrgSection } from '../components/organisms/showOrganisation/ShowOrgSection';
 
 function ShowOrgPage() {
   return (
-    <Box sx={{ bgcolor: 'background.main', minHeight: '100vh' }}>
+    <Box sx={{ bgcolor: 'background.main', minHeight: '100vh', overflowY: 'hidden' }}>
       <AppHeader />
 
       <Box
@@ -19,13 +19,12 @@ function ShowOrgPage() {
           py: 5,
           display: 'flex',
           flexDirection: { xs: 'column', lg: 'row' },
-          alignItems: 'flex-start',
           gap: { xs: 5, lg: 8 },
         }}
       >
-        <Box sx={{ width: { xs: '100%', lg: '50%' }, flexShrink: 0 }}>
+        <Box sx={{ width: { xs: '100%', lg: '50%' }}}>
           <WelcomeSection />
-          <CreateOrganizationCard />
+          <CreateOrgSection />
           <SampleAppsSection />
         </Box>
 
