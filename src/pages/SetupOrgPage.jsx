@@ -7,7 +7,7 @@ import BusinessDetailsForm from "../components/molecules/setupOrganisation/Busin
 import LocationForm from "../components/molecules/setupOrganisation/LocationForm.jsx"
 import OrganizationIdentityForm from "../components/molecules/setupOrganisation/OrganizationIdentityForm.jsx"
 import OwnerDetailsForm from "../components/molecules/setupOrganisation/OwnerDetailsForm.jsx"
-import ProgressBar from "../components/setupOrganisation/ProgressBar.jsx"
+import ProgressBar from "../components/organisms/setupOrganisation/ProgressBar.jsx"
 import Review from "../components/molecules/setupOrganisation/Review.jsx"
 import SetupOrgHeader from "../components/molecules/setupOrganisation/SetupOrgHeader.jsx"
 
