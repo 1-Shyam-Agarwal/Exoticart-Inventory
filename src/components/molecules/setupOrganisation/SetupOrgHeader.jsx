@@ -5,7 +5,7 @@ import Typography from "@mui/material/Typography"
 import CloseIcon from "@mui/icons-material/Close"
 
 export default function SetupOrgHeader({
-  title = "Setup Organization Profile",
+  title,
 }) {
   const navigate = useNavigate()
 
@@ -18,12 +18,10 @@ export default function SetupOrgHeader({
         gap: 1.5,
         height: 64,
         px: { xs: 2, sm: 3 },
-        bgcolor: "background.main",
       }}
     >
       <IconButton
         type="button"
-        aria-label="Close setup and return to organization selection"
         onClick={() => navigate("/")}
         sx={{
           color: "text.secondary",

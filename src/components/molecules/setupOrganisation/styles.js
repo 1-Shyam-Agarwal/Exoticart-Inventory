@@ -1,12 +1,3 @@
-import Box from "@mui/material/Box"
-import { styled } from "@mui/material/styles"
-
-/** Checkout-style field column primitive */
-export const FormGrid = styled(Box)(() => ({
-  display: "flex",
-  flexDirection: "column",
-}))
-
 export const underlineFieldSx = {
   "& .MuiInputBase-root": {
     height: 40,

@@ -1,6 +1,6 @@
 import { z } from "zod"
 
-export const bankDetailsSchema = z.object({
+export const bankAccountSchema = z.object({
   accountHolderName: z
     .string()
     .trim()
@@ -23,4 +23,9 @@ export const bankDetailsSchema = z.object({
     message: "Select an account type",
   }),
   upiId: z.string().trim().max(50, "UPI ID must be 50 characters or fewer").optional(),
+  qrPath: z.string().optional(),
+})
+
+export const bankDetailsSchema = z.object({
+  bankAccounts: z.array(bankAccountSchema).min(1, "At least one bank account is required"),
 })

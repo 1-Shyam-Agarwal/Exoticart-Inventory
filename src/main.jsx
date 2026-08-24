@@ -14,6 +14,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import { ThemeProvider } from '@mui/material/styles';
 import { theme } from './theme.js';
 import { BrowserRouter } from 'react-router-dom';
+import { Toaster } from 'sonner';
 
 const queryClient = new QueryClient();
 
@@ -22,6 +23,7 @@ createRoot(document.getElementById('root')).render(
     <BrowserRouter> 
       <ThemeProvider theme={theme}>
         <QueryClientProvider client={queryClient}>
+          <Toaster position="top-right" richColors/>
           <CssBaseline />
           <App />
         </QueryClientProvider>

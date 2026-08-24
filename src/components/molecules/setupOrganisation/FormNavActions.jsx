@@ -4,13 +4,11 @@ import Stack from "@mui/material/Stack"
 import Typography from "@mui/material/Typography"
 import { ghostButtonSx, primaryButtonSx } from "./styles"
 
-export default function FormNavActions({
+export default function FormActions({
   isFirstStep,
   isLastStep,
   isSubmitting,
-  isSavingStep,
   onBack,
-  onContinue,
   submitError,
 }) {
   const navigate = useNavigate()
@@ -50,26 +48,14 @@ export default function FormNavActions({
           Cancel
         </Button>
 
-        {isLastStep ? (
-          <Button
-            type="submit"
-            variant="contained"
-            disabled={isSubmitting}
-            sx={primaryButtonSx}
-          >
-            Create Organization
-          </Button>
-        ) : (
-          <Button
-            type="button"
-            variant="contained"
-            disabled={isSubmitting || isSavingStep}
-            onClick={onContinue}
-            sx={primaryButtonSx}
-          >
-            Continue
-          </Button>
-        )}
+        <Button
+          type="submit"
+          variant="contained"
+          disabled={isSubmitting}
+          sx={primaryButtonSx}
+        >
+          {isLastStep ? "Create Organization" : "Continue"}
+        </Button>
         </Stack>
       </Stack>
     </Stack>

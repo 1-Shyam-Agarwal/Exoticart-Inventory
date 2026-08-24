@@ -10,7 +10,6 @@ export default class OrganizationDraftController {
 
   async list() {
     try {
-      throw new Error("message")
       const drafts = await this.draftService.list()
 
       return { success: true, drafts }
@@ -62,10 +61,7 @@ export default class OrganizationDraftController {
   async saveOwnerDetails({ data }) {
     try {
       const fields = OrganizationDraftValidator.validateOwnerDetails({
-        ownerName: data.ownerName,
-        countryCode: data.countryCode,
-        mobileNumber: data.mobileNumber,
-        email: data.email,
+        owners: data.owners,
       })
 
       let draftId = data?.draftId
@@ -96,10 +92,6 @@ export default class OrganizationDraftController {
         state: data.state,
         currency: data.currency,
         timezone: data.timezone,
-        street1: data.street1,
-        street2: data.street2,
-        city: data.city,
-        postalCode: data.postalCode,
       })
 
       let draftId = data?.draftId
@@ -155,19 +147,18 @@ export default class OrganizationDraftController {
 
   async saveBankDetails({ data }) {
     try {
-      const qrPath = FileStorageService.saveQrCode(data.qr) ?? undefined
+      const bankAccounts = (data.bankAccounts || []).map((account) => ({
+        ...account,
+        qrPath: FileStorageService.saveQrCode(account.qr) ?? undefined,
+      }))
+
       const fields = OrganizationDraftValidator.validateBankDetails({
-        accountHolderName: data.accountHolderName,
-        bankName: data.bankName,
-        accountNumber: data.accountNumber,
-        ifscCode: data.ifscCode,
-        accountType: data.accountType,
-        upiId: data.upiId,
+        bankAccounts,
       })
 
       let draftId = data?.draftId
 
-      const updated = await this.draftService.saveBankDetails(draftId, fields, qrPath)
+      const updated = await this.draftService.saveBankDetails(draftId, fields)
 
       return { success: true, draft: updated }
 
@@ -177,6 +168,42 @@ export default class OrganizationDraftController {
         return {
           success: false,
           message: error?.message ?? "Invalid bank details data"
+        }
+      }
+      return {
+        success: false,
+        message: error?.message ?? "Internal Server Error",
+      }
+    }
+  }
+
+  async delete({ data }) {
+    try {
+      await this.draftService.delete(data.draftId)
+      return { success: true }
+    } catch (error) {
+      return {
+        success: false,
+        message: error?.message ?? "Internal Server Error",
+      }
+    }
+  }
+
+  async finalize({ data }) {
+    try {
+      const draftId = data?.draftId
+      if (!draftId) {
+        return { success: false, message: "Missing draftId" }
+      }
+
+      const organization = await this.draftService.finalize(draftId)
+
+      return { success: true, organization }
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return {
+          success: false,
+          message: error?.message ?? "Draft is missing required data",
         }
       }
       return {

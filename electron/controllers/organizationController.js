@@ -1,36 +1,54 @@
 import OrganizationService from "../services/organizationService.js"
-import BankDetailsService from "../services/bankDetailsService.js"
-import FileStorageService from "../services/fileStorageService.js"
-import OrganizationValidator from "../validators/organizationValidator.js"
-import BankDetailsValidator from "../validators/bankDetailsValidator.js"
+import OrganizationDraftService from "../services/organizationDraftService.js"
+import OrganizationSerialiser from "../serialisers/organisationSerialiser.js"
 
-export default class OrganizationsController {
+export default class OrganizationController {
   constructor(
     organizationService = new OrganizationService(),
-    bankDetailsService = new BankDetailsService(),
+    draftService = new OrganizationDraftService(),
+    organizationSerialiser = new OrganizationSerialiser()
   ) {
     this.organizationService = organizationService
-    this.bankDetailsService = bankDetailsService
+    this.draftService = draftService
+    this.orgSerialiser = organizationSerialiser
   }
 
-  // GET /organizations/:id — organization profile plus its bank details.
+  async list() {
+    try {
+      const activeOrganizations = await this.organizationService.list()
+      const draftOrganizations = await this.draftService.list()
+      const orgs =  this.orgSerialiser.serialiseList(activeOrganizations , draftOrganizations);
+      console.log({ success: true, ...orgs })
+      return { success: true, ...orgs }
+    } catch (error) {
+      return {
+        success: false,
+        message: error?.message ?? "Internal Server Error",
+      }
+    }
+  }
+
   async show({ data }) {
-    const organization = this.organizationService.findById(data.id)
-    const bankDetails = this.bankDetailsService.findByOrganizationId(data.id)
-
-    return { organization, bankDetails }
+    try {
+      const organization = await this.organizationService.findById(data.id)
+      return { success: true, organization }
+    } catch (error) {
+      return {
+        success: false,
+        message: error?.message ?? "Internal Server Error",
+      }
+    }
   }
 
-  async store({ data }) {
-    const logoPath = FileStorageService.saveLogo(data.logo) ?? undefined
-    const qrPath = FileStorageService.saveQrCode(data.qr) ?? undefined
-
-    const organizationPayload = await OrganizationValidator.validateAsync({ ...data, logoPath })
-    const bankDetailsPayload = await BankDetailsValidator.validateAsync({ ...data, qrPath })
-
-    const organization = this.organizationService.create(organizationPayload)
-    const bankDetails = this.bankDetailsService.create(organization.data.id, bankDetailsPayload)
-
-    return { organization, bankDetails }
+  async delete({ data }) {
+    try {
+      await this.organizationService.delete(data.id)
+      return { success: true , message : "Organisation deleted successfully."}
+    } catch (error) {
+      return {
+        success: false,
+        message: error?.message ?? "Internal Server Error",
+      }
+    }
   }
 }

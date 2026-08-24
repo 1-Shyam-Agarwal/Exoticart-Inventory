@@ -3,10 +3,9 @@ import Stack from "@mui/material/Stack"
 import Typography from "@mui/material/Typography"
 import { stepTitleSx } from "./styles"
 
-/** Shared step shell — title + vertical field stack */
 export default function StepLayout({ title, children }) {
   return (
-    <Box sx={{ maxWidth: "42rem", width: "100%" }}>
+    <Box sx={{ flex:1 }}>
       <Typography component="h2" sx={stepTitleSx}>
         {title}
       </Typography>

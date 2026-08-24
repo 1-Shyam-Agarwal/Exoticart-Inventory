@@ -1,8 +1,8 @@
 import { useFormContext } from "react-hook-form"
 import Box from "@mui/material/Box"
 import Typography from "@mui/material/Typography"
-import { LogoPreview } from "./ImagePreview"
-import { LogoUploadPlaceholder } from "./ImagePlaceholder"
+import { LogoPreview } from "../../molecules/setupOrganisation/ImagePreview"
+import { LogoUploadPlaceholder } from "../../molecules/setupOrganisation/ImagePlaceholder"
 
 function readFileAsDataUrl(file) {
   return new Promise((resolve, reject) => {

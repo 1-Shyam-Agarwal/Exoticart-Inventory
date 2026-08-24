@@ -17,8 +17,4 @@ export const locationSchema = z.object({
   timezone: z.enum(timezones, {
     message: "Select a valid timezone",
   }),
-  street1: z.string().trim().max(300, "Street 1 must be 300 characters or fewer").optional(),
-  street2: z.string().trim().max(300, "Street 2 must be 300 characters or fewer").optional(),
-  city: z.string().trim().max(100, "City must be 100 characters or fewer").optional(),
-  postalCode: z.string().trim().max(10, "ZIP / Postal Code must be 10 characters or fewer").optional(),
 })

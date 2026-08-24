@@ -8,7 +8,7 @@ export const theme = createTheme({
       contrastText: '#202124',
     },
     secondary: {
-      main: '#35363A',
+      main: '#2A2B2E',
       contrastText: '#8AB4F8',
     },
     error: {
@@ -19,16 +19,16 @@ export const theme = createTheme({
       secondary: '#9AA0A6',
     },
     background: {
-      default: '#202124',
-      paper: '#292A2D',
-      main: '#202124',
-      muted: 'rgba(53, 54, 58, 0.6)',
+      default: '#17181A',
+      paper: '#1E1F21',
+      main: '#17181A',
+      muted: 'rgba(42, 43, 46, 0.6)',
     },
     border: {
-      soft: 'rgba(60, 64, 67, 0.6)',
-      main: '#3C4043',
+      soft: 'rgba(48, 51, 53, 0.6)',
+      main: '#303335',
     },
-    divider: '#3C4043',
+    divider: '#303335',
   },
   typography: {
     fontFamily: '"DM Sans", system-ui, sans-serif',
@@ -36,5 +36,14 @@ export const theme = createTheme({
   },
   shape: {
     borderRadius: 8,
+  },
+  components: {
+    MuiDialog: {
+      styleOverrides: {
+        paper: {
+          backgroundColor: '#000000',
+        },
+      },
+    },
   },
 });

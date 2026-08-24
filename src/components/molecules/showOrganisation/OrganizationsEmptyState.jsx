@@ -16,7 +16,7 @@ export function OrganizationsEmptyState({ icon: Icon, title, description}) {
       }}
     >
       <Stack sx={{ alignItems: 'center', textAlign: 'center' }}>
-        {Icon ? <Icon sx={{ fontSize: 64, color: 'text.secondary' }} /> : null}
+        {Icon && <Icon sx={{ fontSize: 64, color: 'text.secondary' }} />}
 
         <Stack sx={{ alignItems: 'center' }}>
           <Typography variant="subtitle1" sx={{ fontWeight: 600, fontSize: '1.125rem', color: 'text.primary' }}>

@@ -1,6 +1,7 @@
 import { app, BrowserWindow , ipcMain} from "electron"
 import path from "node:path"
 import OrganizationDraftController from "./controllers/organizationDraftController.js"
+import OrganizationController from "./controllers/organizationController.js"
 
 const createWindow = () => {
   const win = new BrowserWindow({
@@ -45,6 +46,31 @@ app.whenReady().then(() => {
   ipcMain.handle(
     'organization-draft:save-bank-details',
     (_event, data) => new OrganizationDraftController().saveBankDetails({ data })
+  )
+
+  ipcMain.handle(
+    'organization-draft:finalize',
+    (_event, data) => new OrganizationDraftController().finalize({ data })
+  )
+
+  ipcMain.handle(
+    'organization-draft:delete',
+    (_event, data) => new OrganizationDraftController().delete({ data })
+  )
+
+  ipcMain.handle(
+    'organization:list',
+    () => new OrganizationController().list()
+  )
+
+  ipcMain.handle(
+    'organization:show',
+    (_event, data) => new OrganizationController().show({ data })
+  )
+
+  ipcMain.handle(
+    'organization:delete',
+    (_event, data) => new OrganizationController().delete({ data })
   )
 
   createWindow()
