@@ -1,7 +1,7 @@
 import { Routes, Route } from 'react-router-dom';
 import ShowOrgPage from './pages/ShowOrgPage';
 import SetupOrgPage from './pages/SetupOrgPage';
-import Dashboard from './pages/dashboard';
+import Dashboard from './pages/Dashboard';
 
 function App() {
   return (
