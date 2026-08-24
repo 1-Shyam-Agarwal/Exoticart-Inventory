@@ -20,7 +20,6 @@ export function CreateOrgSection() {
           title="Set up your organization"
           description="Integrate Smart Inventory to super-charge your business."
           image={developerLogo}
-          bgColor='border.soft'
           onClickHandler={() => navigate('/org/setup')}
       />
     </Box>

@@ -5,6 +5,7 @@ import Error from '../../molecules/showOrganisation/Error';
 import Loader from '../../molecules/showOrganisation/Loader';
 
 import Box from '@mui/material/Box';
+import Card from '@mui/material/Card';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
@@ -177,12 +178,10 @@ export function ShowOrgSection() {
         />
       </Stack>
 
-      <Box
+      <Card
+        variant="outlined"
         sx={{
-          border: '1px solid',
           borderColor: 'border.soft',
-          borderRadius: 1,
-          bgcolor: 'background.soft',
           overflow: 'hidden',
           height: PAGE_SIZE * ROW_HEIGHT,
           display: 'flex',
@@ -225,7 +224,7 @@ export function ShowOrgSection() {
           </Stack>
         )}
 
-      </Box>
+      </Card>
 
       {/* Pagination */}
       <Stack

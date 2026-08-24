@@ -24,14 +24,12 @@ export function SampleAppsSection() {
           title="Import Existing Inventory"
           description="Import products and stock using CSV or Excel templates."
           icon={GridOnOutlinedIcon}
-          bgColor='border.paper'
           onClickHandler={() => navigate('/org/setup')}
         />
         <ActionCard
           title="Explore Demo Organization"
           description="Browse a preconfigured organization to understand Smart Inventory."
           icon={AutoAwesomeOutlinedIcon}
-          bgColor = 'border.paper'
           onClickHandler={() => navigate('/org/setup')}
         />
       </Stack>
