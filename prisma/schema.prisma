@@ -35,6 +35,14 @@ model Organization {
 
   contacts    OrganizationContact[]
   bankDetails OrganizationBankDetail[]
+
+  categories     Category[]
+  brands         Brand[]
+  manufacturers  Manufacturer[]
+  units          Unit[]
+  dimensionUnits DimensionUnit[]
+  weightUnits    WeightUnit[]
+  boxTypes       BoxType[]
 }
 
 model OrganizationContact {
@@ -96,6 +104,77 @@ model OrganizationBankDetail {
   updatedAt DateTime @updatedAt
 
   organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+}
+
+model Category {
+  id             Int    @id @default(autoincrement())
+  category       String
+  organizationId Int
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@unique([organizationId, category])
+}
+
+model Brand {
+  id             Int    @id @default(autoincrement())
+  brand          String
+  organizationId Int
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@unique([organizationId, brand])
+}
+
+model Manufacturer {
+  id             Int    @id @default(autoincrement())
+  manufacturer   String
+  organizationId Int
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@unique([organizationId, manufacturer])
+}
+
+model Unit {
+  id             Int    @id @default(autoincrement())
+  unit           String
+  organizationId Int
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@unique([organizationId, unit])
+}
+
+model DimensionUnit {
+  id             Int    @id @default(autoincrement())
+  dimensionUnit  String
+  organizationId Int
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@unique([organizationId, dimensionUnit])
+}
+
+model WeightUnit {
+  id             Int    @id @default(autoincrement())
+  weightUnit     String
+  organizationId Int
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@unique([organizationId, weightUnit])
+}
+
+model BoxType {
+  id             Int    @id @default(autoincrement())
+  name           String
+  numberOfItems  Int
+  organizationId Int
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@unique([organizationId, name])
 }
 
 model OrganizationDraft {
