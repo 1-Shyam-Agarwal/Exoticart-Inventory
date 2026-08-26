@@ -34,5 +34,13 @@ contextBridge.exposeInMainWorld("api", {
             ipcRenderer.invoke("category:create", data),
         delete: (data) =>
             ipcRenderer.invoke("category:delete", data)
+    },
+    brands: {
+        list: (data) =>
+            ipcRenderer.invoke("brand:list", data),
+        create: (data) =>
+            ipcRenderer.invoke("brand:create", data),
+        delete: (data) =>
+            ipcRenderer.invoke("brand:delete", data)
     }
 })
