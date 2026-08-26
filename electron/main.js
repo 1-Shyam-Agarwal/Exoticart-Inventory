@@ -2,6 +2,7 @@ import { app, BrowserWindow , ipcMain} from "electron"
 import path from "node:path"
 import OrganizationDraftController from "./controllers/organizationDraftController.js"
 import OrganizationController from "./controllers/organizationController.js"
+import CategoryController from "./controllers/categoryController.js"
 
 const createWindow = () => {
   const win = new BrowserWindow({
@@ -71,6 +72,21 @@ app.whenReady().then(() => {
   ipcMain.handle(
     'organization:delete',
     (_event, data) => new OrganizationController().delete({ data })
+  )
+
+  ipcMain.handle(
+    'category:list',
+    (_event, data) => new CategoryController().list({ data })
+  )
+
+  ipcMain.handle(
+    'category:create',
+    (_event, data) => new CategoryController().create({ data })
+  )
+
+  ipcMain.handle(
+    'category:delete',
+    (_event, data) => new CategoryController().delete({ data })
   )
 
   createWindow()
