@@ -39,9 +39,6 @@ model Organization {
   categories     Category[]
   brands         Brand[]
   manufacturers  Manufacturer[]
-  units          Unit[]
-  dimensionUnits DimensionUnit[]
-  weightUnits    WeightUnit[]
   boxTypes       BoxType[]
 }
 
@@ -108,7 +105,7 @@ model OrganizationBankDetail {
 
 model Category {
   id             Int    @id @default(autoincrement())
-  category       String
+  category       String 
   organizationId Int
 
   organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
@@ -134,36 +131,6 @@ model Manufacturer {
   organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
 
   @@unique([organizationId, manufacturer])
-}
-
-model Unit {
-  id             Int    @id @default(autoincrement())
-  unit           String
-  organizationId Int
-
-  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-
-  @@unique([organizationId, unit])
-}
-
-model DimensionUnit {
-  id             Int    @id @default(autoincrement())
-  dimensionUnit  String
-  organizationId Int
-
-  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-
-  @@unique([organizationId, dimensionUnit])
-}
-
-model WeightUnit {
-  id             Int    @id @default(autoincrement())
-  weightUnit     String
-  organizationId Int
-
-  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-
-  @@unique([organizationId, weightUnit])
 }
 
 model BoxType {
