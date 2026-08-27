@@ -42,5 +42,21 @@ contextBridge.exposeInMainWorld("api", {
             ipcRenderer.invoke("brand:create", data),
         delete: (data) =>
             ipcRenderer.invoke("brand:delete", data)
+    },
+    manufacturers: {
+        list: (data) =>
+            ipcRenderer.invoke("manufacturer:list", data),
+        create: (data) =>
+            ipcRenderer.invoke("manufacturer:create", data),
+        delete: (data) =>
+            ipcRenderer.invoke("manufacturer:delete", data)
+    },
+    boxTypes: {
+        list: (data) =>
+            ipcRenderer.invoke("box-type:list", data),
+        create: (data) =>
+            ipcRenderer.invoke("box-type:create", data),
+        delete: (data) =>
+            ipcRenderer.invoke("box-type:delete", data)
     }
 })

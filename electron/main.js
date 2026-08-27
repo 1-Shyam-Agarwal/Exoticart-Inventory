@@ -3,6 +3,9 @@ import path from "node:path"
 import OrganizationDraftController from "./controllers/organizationDraftController.js"
 import OrganizationController from "./controllers/organizationController.js"
 import CategoryController from "./controllers/categoryController.js"
+import BrandController from "./controllers/brandController.js"
+import ManufacturerController from "./controllers/manufacturerController.js"
+import BoxTypeController from "./controllers/boxTypeController.js"
 
 const createWindow = () => {
   const win = new BrowserWindow({
@@ -87,6 +90,51 @@ app.whenReady().then(() => {
   ipcMain.handle(
     'category:delete',
     (_event, data) => new CategoryController().delete({ data })
+  )
+
+  ipcMain.handle(
+    'brand:list',
+    (_event, data) => new BrandController().list({ data })
+  )
+
+  ipcMain.handle(
+    'brand:create',
+    (_event, data) => new BrandController().create({ data })
+  )
+
+  ipcMain.handle(
+    'brand:delete',
+    (_event, data) => new BrandController().delete({ data })
+  )
+
+  ipcMain.handle(
+    'manufacturer:list',
+    (_event, data) => new ManufacturerController().list({ data })
+  )
+
+  ipcMain.handle(
+    'manufacturer:create',
+    (_event, data) => new ManufacturerController().create({ data })
+  )
+
+  ipcMain.handle(
+    'manufacturer:delete',
+    (_event, data) => new ManufacturerController().delete({ data })
+  )
+
+  ipcMain.handle(
+    'box-type:list',
+    (_event, data) => new BoxTypeController().list({ data })
+  )
+
+  ipcMain.handle(
+    'box-type:create',
+    (_event, data) => new BoxTypeController().create({ data })
+  )
+
+  ipcMain.handle(
+    'box-type:delete',
+    (_event, data) => new BoxTypeController().delete({ data })
   )
 
   createWindow()
