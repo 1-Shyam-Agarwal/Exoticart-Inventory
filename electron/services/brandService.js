@@ -14,6 +14,10 @@ export default class BrandService {
     })
   }
 
+  async update({ id, brand }) {
+    return prisma.brand.update({ where: { id }, data: { brand } })
+  }
+
   async delete(id) {
     return prisma.brand.delete({ where: { id } })
   }

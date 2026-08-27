@@ -1,4 +1,4 @@
-import { brandCreateSchema, brandDeleteSchema, brandListSchema } from "../../shared/validation/brandSchema.js"
+import { brandCreateSchema, brandDeleteSchema, brandListSchema, brandUpdateSchema } from "../../shared/validation/brandSchema.js"
 
 export default class BrandValidator {
   static validateList(data) {
@@ -7,6 +7,10 @@ export default class BrandValidator {
 
   static validateCreate(data) {
     return brandCreateSchema.parse(data)
+  }
+
+  static validateUpdate(data) {
+    return brandUpdateSchema.parse(data)
   }
 
   static validateDelete(data) {

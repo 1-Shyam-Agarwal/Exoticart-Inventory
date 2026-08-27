@@ -36,6 +36,22 @@ export default class BoxTypeController {
     }
   }
 
+  async update({ data }) {
+    try {
+      const fields = BoxTypeValidator.validateUpdate(data)
+      const boxType = await this.boxTypeService.update(fields)
+      return { success: true, boxType }
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return { success: false, message: error?.message ?? "Invalid box type data" }
+      }
+      if (error?.code === "P2002") {
+        return { success: false, message: "This box type already exists" }
+      }
+      return { success: false, message: error?.message ?? "Internal Server Error" }
+    }
+  }
+
   async delete({ data }) {
     try {
       const { id } = BoxTypeValidator.validateDelete(data)

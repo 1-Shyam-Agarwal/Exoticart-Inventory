@@ -36,6 +36,22 @@ export default class ManufacturerController {
     }
   }
 
+  async update({ data }) {
+    try {
+      const fields = ManufacturerValidator.validateUpdate(data)
+      const manufacturer = await this.manufacturerService.update(fields)
+      return { success: true, manufacturer }
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return { success: false, message: error?.message ?? "Invalid manufacturer data" }
+      }
+      if (error?.code === "P2002") {
+        return { success: false, message: "This manufacturer already exists" }
+      }
+      return { success: false, message: error?.message ?? "Internal Server Error" }
+    }
+  }
+
   async delete({ data }) {
     try {
       const { id } = ManufacturerValidator.validateDelete(data)

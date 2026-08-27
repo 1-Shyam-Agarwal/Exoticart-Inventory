@@ -36,6 +36,22 @@ export default class CategoryController {
     }
   }
 
+  async update({ data }) {
+    try {
+      const fields = CategoryValidator.validateUpdate(data)
+      const category = await this.categoryService.update(fields)
+      return { success: true, category }
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return { success: false, message: error?.message ?? "Invalid category data" }
+      }
+      if (error?.code === "P2002") {
+        return { success: false, message: "This category already exists" }
+      }
+      return { success: false, message: error?.message ?? "Internal Server Error" }
+    }
+  }
+
   async delete({ data }) {
     try {
       const { id } = CategoryValidator.validateDelete(data)

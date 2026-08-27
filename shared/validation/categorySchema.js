@@ -17,3 +17,12 @@ export const categoryCreateSchema = z.object({
 export const categoryDeleteSchema = z.object({
   id: IdSchema,
 })
+
+export const categoryUpdateSchema = z.object({
+  id: IdSchema,
+  category: z
+    .string()
+    .trim()
+    .min(1, "Category name is required")
+    .max(50, "Max 50 characters allowed"),
+})

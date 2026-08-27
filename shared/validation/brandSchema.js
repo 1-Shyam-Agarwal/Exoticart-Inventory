@@ -17,3 +17,12 @@ export const brandCreateSchema = z.object({
 export const brandDeleteSchema = z.object({
   id: IdSchema,
 })
+
+export const brandUpdateSchema = z.object({
+  id: IdSchema,
+  brand: z
+    .string()
+    .trim()
+    .min(1, "Brand name is required")
+    .max(50, "Max 50 characters allowed"),
+})

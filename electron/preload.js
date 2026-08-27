@@ -32,6 +32,8 @@ contextBridge.exposeInMainWorld("api", {
             ipcRenderer.invoke("category:list", data),
         create: (data) =>
             ipcRenderer.invoke("category:create", data),
+        update: (data) =>
+            ipcRenderer.invoke("category:update", data),
         delete: (data) =>
             ipcRenderer.invoke("category:delete", data)
     },
@@ -40,6 +42,8 @@ contextBridge.exposeInMainWorld("api", {
             ipcRenderer.invoke("brand:list", data),
         create: (data) =>
             ipcRenderer.invoke("brand:create", data),
+        update: (data) =>
+            ipcRenderer.invoke("brand:update", data),
         delete: (data) =>
             ipcRenderer.invoke("brand:delete", data)
     },
@@ -48,6 +52,8 @@ contextBridge.exposeInMainWorld("api", {
             ipcRenderer.invoke("manufacturer:list", data),
         create: (data) =>
             ipcRenderer.invoke("manufacturer:create", data),
+        update: (data) =>
+            ipcRenderer.invoke("manufacturer:update", data),
         delete: (data) =>
             ipcRenderer.invoke("manufacturer:delete", data)
     },
@@ -56,6 +62,8 @@ contextBridge.exposeInMainWorld("api", {
             ipcRenderer.invoke("box-type:list", data),
         create: (data) =>
             ipcRenderer.invoke("box-type:create", data),
+        update: (data) =>
+            ipcRenderer.invoke("box-type:update", data),
         delete: (data) =>
             ipcRenderer.invoke("box-type:delete", data)
     }

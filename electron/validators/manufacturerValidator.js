@@ -1,4 +1,4 @@
-import { manufacturerCreateSchema, manufacturerDeleteSchema, manufacturerListSchema } from "../../shared/validation/manufacturerSchema.js"
+import { manufacturerCreateSchema, manufacturerDeleteSchema, manufacturerListSchema, manufacturerUpdateSchema } from "../../shared/validation/manufacturerSchema.js"
 
 export default class ManufacturerValidator {
   static validateList(data) {
@@ -7,6 +7,10 @@ export default class ManufacturerValidator {
 
   static validateCreate(data) {
     return manufacturerCreateSchema.parse(data)
+  }
+
+  static validateUpdate(data) {
+    return manufacturerUpdateSchema.parse(data)
   }
 
   static validateDelete(data) {

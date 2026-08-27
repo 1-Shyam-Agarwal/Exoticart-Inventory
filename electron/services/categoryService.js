@@ -14,6 +14,10 @@ export default class CategoryService {
     })
   }
 
+  async update({ id, category }) {
+    return prisma.category.update({ where: { id }, data: { category } })
+  }
+
   async delete(id) {
     return prisma.category.delete({ where: { id } })
   }

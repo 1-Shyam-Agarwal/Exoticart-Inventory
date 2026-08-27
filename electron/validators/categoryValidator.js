@@ -1,4 +1,4 @@
-import { categoryCreateSchema, categoryDeleteSchema, categoryListSchema } from "../../shared/validation/categorySchema.js"
+import { categoryCreateSchema, categoryDeleteSchema, categoryListSchema, categoryUpdateSchema } from "../../shared/validation/categorySchema.js"
 
 export default class CategoryValidator {
   static validateList(data) {
@@ -7,6 +7,10 @@ export default class CategoryValidator {
 
   static validateCreate(data) {
     return categoryCreateSchema.parse(data)
+  }
+
+  static validateUpdate(data) {
+    return categoryUpdateSchema.parse(data)
   }
 
   static validateDelete(data) {

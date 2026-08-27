@@ -14,6 +14,10 @@ export default class ManufacturerService {
     })
   }
 
+  async update({ id, manufacturer }) {
+    return prisma.manufacturer.update({ where: { id }, data: { manufacturer } })
+  }
+
   async delete(id) {
     return prisma.manufacturer.delete({ where: { id } })
   }

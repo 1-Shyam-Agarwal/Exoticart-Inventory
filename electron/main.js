@@ -88,6 +88,11 @@ app.whenReady().then(() => {
   )
 
   ipcMain.handle(
+    'category:update',
+    (_event, data) => new CategoryController().update({ data })
+  )
+
+  ipcMain.handle(
     'category:delete',
     (_event, data) => new CategoryController().delete({ data })
   )
@@ -100,6 +105,11 @@ app.whenReady().then(() => {
   ipcMain.handle(
     'brand:create',
     (_event, data) => new BrandController().create({ data })
+  )
+
+  ipcMain.handle(
+    'brand:update',
+    (_event, data) => new BrandController().update({ data })
   )
 
   ipcMain.handle(
@@ -118,6 +128,11 @@ app.whenReady().then(() => {
   )
 
   ipcMain.handle(
+    'manufacturer:update',
+    (_event, data) => new ManufacturerController().update({ data })
+  )
+
+  ipcMain.handle(
     'manufacturer:delete',
     (_event, data) => new ManufacturerController().delete({ data })
   )
@@ -130,6 +145,11 @@ app.whenReady().then(() => {
   ipcMain.handle(
     'box-type:create',
     (_event, data) => new BoxTypeController().create({ data })
+  )
+
+  ipcMain.handle(
+    'box-type:update',
+    (_event, data) => new BoxTypeController().update({ data })
   )
 
   ipcMain.handle(

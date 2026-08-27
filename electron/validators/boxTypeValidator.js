@@ -1,4 +1,4 @@
-import { boxTypeCreateSchema, boxTypeDeleteSchema, boxTypeListSchema } from "../../shared/validation/boxTypeSchema.js"
+import { boxTypeCreateSchema, boxTypeDeleteSchema, boxTypeListSchema, boxTypeUpdateSchema } from "../../shared/validation/boxTypeSchema.js"
 
 export default class BoxTypeValidator {
   static validateList(data) {
@@ -7,6 +7,10 @@ export default class BoxTypeValidator {
 
   static validateCreate(data) {
     return boxTypeCreateSchema.parse(data)
+  }
+
+  static validateUpdate(data) {
+    return boxTypeUpdateSchema.parse(data)
   }
 
   static validateDelete(data) {

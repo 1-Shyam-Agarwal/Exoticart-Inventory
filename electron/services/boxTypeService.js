@@ -14,6 +14,10 @@ export default class BoxTypeService {
     })
   }
 
+  async update({ id, name, numberOfItems }) {
+    return prisma.boxType.update({ where: { id }, data: { name, numberOfItems } })
+  }
+
   async delete(id) {
     return prisma.boxType.delete({ where: { id } })
   }
