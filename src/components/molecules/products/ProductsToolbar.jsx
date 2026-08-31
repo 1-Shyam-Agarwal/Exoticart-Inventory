@@ -3,13 +3,13 @@ import IconButton from '@mui/material/IconButton';
 import Stack from '@mui/material/Stack';
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
-import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import MoreHorizRoundedIcon from '@mui/icons-material/MoreHorizRounded';
 import ViewListRoundedIcon from '@mui/icons-material/ViewListRounded';
 import ViewModuleRoundedIcon from '@mui/icons-material/ViewModuleRounded';
 import Typography from '@mui/material/Typography';
+import AddIcon from '@mui/icons-material/Add';
 
-export function ProductsToolbar({ view = 'list', onViewChange}) {
+export function ProductsToolbar({ view = 'list', onViewChange, clickHandler }) {
   return (
     <Stack
       direction="row"
@@ -43,17 +43,16 @@ export function ProductsToolbar({ view = 'list', onViewChange}) {
         <Button
           type="button"
           variant="contained"
+          onClick={clickHandler}
           sx={{
             textTransform: 'none',
-            fontWeight: 200,
             minWidth: 0,
-            width: 32,
-            height: 32,
             borderRadius: 0.5,
             color: 'black',
+            fontWeight: 400,
           }}
         >
-          <AddRoundedIcon fontSize="small" sx={{ color: 'common.black' }} />
+          Add <AddIcon fontSize="small" sx={{ color: 'black', fontWeight: 200 }} />
         </Button>
       </Stack>
     </Stack>

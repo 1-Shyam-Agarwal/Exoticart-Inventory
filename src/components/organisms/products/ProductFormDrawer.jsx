@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Box from '@mui/material/Box';
@@ -30,6 +31,8 @@ export function ProductFormDrawer({ isDrawerOpen, closeHandler }) {
   const methods = useForm({
     defaultValues: productDefaultValues,
     resolver: zodResolver(productSchema),
+    mode: "onBlur",
+    reValidateMode: "onChange",
   });
 
   const {
@@ -38,13 +41,18 @@ export function ProductFormDrawer({ isDrawerOpen, closeHandler }) {
     formState: { errors, isSubmitting },
   } = methods;
 
+  // TEMP: measuring open latency, remove after
+  useEffect(() => {
+    if (isDrawerOpen) console.timeEnd('drawer-open');
+  }, [isDrawerOpen]);
+
+  // Only starts the slide-out; the form is reset in the transition's onExited so
+  // the fields don't blank out while the drawer is still animating away.
   function handleClose() {
-    reset();
     closeHandler();
   }
 
-  const onSubmit = (values) => {
-    console.log("values : " , values)
+  const onSubmit = (data) => {
     handleClose()
   };
 
@@ -52,11 +60,12 @@ export function ProductFormDrawer({ isDrawerOpen, closeHandler }) {
     <Drawer
       anchor="right"
       open={isDrawerOpen}
-      onClose={closeHandler}
+      onClose={handleClose}
       slotProps={{
         paper: {
           sx: { width: { xs: '100%', sm: '40%' }, bgcolor: '#141416', backgroundImage: 'none' },
         },
+        transition: { onExited: () => reset() },
       }}
     >
       <FormProvider {...methods}>

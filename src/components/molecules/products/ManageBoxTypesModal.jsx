@@ -15,12 +15,12 @@ import CheckRoundedIcon from '@mui/icons-material/CheckRounded';
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import DeleteOutlineRoundedIcon from '@mui/icons-material/DeleteOutlineRounded';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
-import FolderOutlinedIcon from '@mui/icons-material/FolderOutlined';
-import FieldError from '../../atoms/setupOrganisation/FieldError';
+import Inventory2OutlinedIcon from '@mui/icons-material/Inventory2Outlined';
 
 import { fieldSx } from './styles';
+import FieldError from '../../atoms/setupOrganisation/FieldError';
 
-export function ManageOptionsModal({
+export function ManageBoxTypesModal({
   open,
   modalDetails,
   items,
@@ -30,19 +30,23 @@ export function ManageOptionsModal({
   onDeleteItem,
 }) {
   const [isAdding, setIsAdding] = useState(false);
-  const [newItemName, setNewItemName] = useState('');
-  const [error , setError] = useState('');
+  const [name, setName] = useState('');
+  const [error , setError] = useState('')
+  const [numberOfItems, setNumberOfItems] = useState('');
   const [editingItem, setEditingItem] = useState(null);
-  const [editValue, setEditValue] = useState('');
+  const [editName, setEditName] = useState('');
+  const [editNumberOfItems, setEditNumberOfItems] = useState('');
 
   function resetAddState() {
     setIsAdding(false);
-    setNewItemName('');
+    setName('');
+    setNumberOfItems('');
   }
 
   function cancelEditing() {
     setEditingItem(null);
-    setEditValue('');
+    setEditName('');
+    setEditNumberOfItems('');
   }
 
   function handleClose() {
@@ -52,70 +56,82 @@ export function ManageOptionsModal({
   }
 
   function handleAddItem() {
-    setError('')
-    const trimmedData = newItemName.trim();
-    if (!trimmedData){
-      setError("Required")
-      return;
-    }
-    onAddItemHandler(trimmedData);
+    setError('');
+    const trimmedName = name.trim();
+    const count = Number(numberOfItems);
+    if (!trimmedName || !Number.isFinite(count) || count <= 0) {
+        setError("Name or count is invalid. Please check.")
+        return;
+    };
+    onAddItemHandler({ name: trimmedName, numberOfItems: count });
     resetAddState();
   }
 
   function startEditing(item) {
-    setEditingItem(item);
-    setEditValue(item);
+    setEditingItem(item.name);
+    setEditName(item.name);
+    setEditNumberOfItems(String(item.numberOfItems));
   }
 
   function saveEditing() {
-    const trimmed = editValue.trim();
-    if (!trimmed || trimmed === editingItem) {
-      cancelEditing();
-      return;
-    }
-    onEditItemHandler(editingItem, trimmed);
+    const trimmedName = editName.trim();
+    const count = Number(editNumberOfItems);
+    if (!trimmedName || !Number.isFinite(count) || count <= 0) return;
+    onEditItemHandler(editingItem, { name: trimmedName, numberOfItems: count });
     cancelEditing();
   }
 
   const hasItems = Boolean(items?.length);
 
   const addForm = (
-    <Stack direction="row" spacing={1} sx={{ width: '100%' , alignItems: 'start'}}>
-      <Stack>
+    <Stack spacing={1.5} sx={{ width: '100%' }}>
+    <Stack>
+      <Stack direction="row" spacing={1}>
         <TextField
           autoFocus
           size="small"
           fullWidth
           placeholder={modalDetails.itemPlaceholder}
-          value={newItemName}
-          onChange={(event) => setNewItemName(event.target.value)}
+          value={name}
+          onChange={(event) => setName(event.target.value)}
+          sx={fieldSx}
+        />
+        <TextField
+          size="small"
+          type="number"
+          placeholder="Items"
+          value={numberOfItems}
+          onChange={(event) => setNumberOfItems(event.target.value)}
           onKeyDown={(event) => {
             if (event.key === 'Enter') {
               event.preventDefault();
               handleAddItem();
             }
           }}
-          sx={fieldSx}
+          slotProps={{ htmlInput: { min: 1 } }}
+          sx={{ ...fieldSx, width: 110, flexShrink: 0 }}
         />
-        {error && <FieldError message={error}/>}
-       </Stack>
-      
-      <Button
-        variant="contained"
-        size="small"
-        onClick={handleAddItem}
-        sx={{ textTransform: 'none', borderRadius: 1, flexShrink: 0 }}
-      >
-        Add
-      </Button>
-      <Button
-        variant="outlined"
-        size="small"
-        onClick={resetAddState}
-        sx={{ textTransform: 'none', borderRadius: 1, flexShrink: 0 }}
-      >
-        Cancel
-      </Button>
+      </Stack>
+      {error && <FieldError message={error}/>}
+    </Stack>
+      <Stack direction="row" spacing={1} sx={{ justifyContent: 'flex-end' }}>
+        <Button
+          variant="outlined"
+          size="small"
+          onClick={resetAddState}
+          sx={{ textTransform: 'none', borderRadius: 1 }}
+        >
+          Cancel
+        </Button>
+        <Button
+          variant="contained"
+          size="small"
+          onClick={handleAddItem}
+          sx={{ textTransform: 'none', borderRadius: 1 }}
+        >
+          Add
+        </Button>
+      </Stack>
     </Stack>
   );
 
@@ -140,7 +156,7 @@ export function ManageOptionsModal({
         <Typography sx={{ fontSize: '0.95rem', fontWeight: 600, color: 'text.primary' }}>
           {modalDetails.title}
         </Typography>
-        <IconButton onClick={onCloseHandler} size="small" sx={{ color: 'error.main' }}>
+        <IconButton onClick={handleClose} size="small" sx={{ color: 'error.main' }}>
           <CloseRoundedIcon fontSize="small" />
         </IconButton>
       </Stack>
@@ -172,7 +188,7 @@ export function ManageOptionsModal({
         {hasItems ? (
           <List sx={{ maxHeight: 240, overflowY: 'auto', px: 0, py: 0.5 }}>
             {items.map((item) => {
-              const isEditing = editingItem === item;
+              const isEditing = editingItem === item.name;
 
               const rowSx = {
                 px: 0,
@@ -183,15 +199,22 @@ export function ManageOptionsModal({
 
               if (isEditing) {
                 return (
-                  <ListItem key={item} dense disableGutters sx={rowSx}>
+                  <ListItem key={item.name} dense disableGutters sx={rowSx}>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, width: '100%' }}>
-                      <FolderOutlinedIcon fontSize="small" sx={{ color: 'primary.main', flexShrink: 0 }} />
+                      <Inventory2OutlinedIcon fontSize="small" sx={{ color: 'primary.main', flexShrink: 0 }} />
                       <TextField
                         autoFocus
                         size="small"
                         fullWidth
-                        value={editValue}
-                        onChange={(event) => setEditValue(event.target.value)}
+                        value={editName}
+                        onChange={(event) => setEditName(event.target.value)}
+                        sx={fieldSx}
+                      />
+                      <TextField
+                        size="small"
+                        type="number"
+                        value={editNumberOfItems}
+                        onChange={(event) => setEditNumberOfItems(event.target.value)}
                         onKeyDown={(event) => {
                           if (event.key === 'Enter') {
                             event.preventDefault();
@@ -201,13 +224,14 @@ export function ManageOptionsModal({
                             cancelEditing();
                           }
                         }}
-                        sx={fieldSx}
+                        slotProps={{ htmlInput: { min: 1 } }}
+                        sx={{ ...fieldSx, width: 90, flexShrink: 0 }}
                       />
                       <IconButton
                         size="small"
                         onClick={saveEditing}
                         sx={{ color: 'success.main', flexShrink: 0 }}
-                        aria-label={`Save ${item}`}
+                        aria-label={`Save ${item.name}`}
                       >
                         <CheckRoundedIcon fontSize="small" />
                       </IconButton>
@@ -226,7 +250,7 @@ export function ManageOptionsModal({
 
               return (
                 <ListItem
-                  key={item}
+                  key={item.name}
                   dense
                   secondaryAction={
                     <Stack direction="row" spacing={0.5}>
@@ -234,16 +258,16 @@ export function ManageOptionsModal({
                         size="small"
                         onClick={() => startEditing(item)}
                         sx={{ color: 'text.secondary' }}
-                        aria-label={`Edit ${item}`}
+                        aria-label={`Edit ${item.name}`}
                       >
                         <EditOutlinedIcon fontSize="small" />
                       </IconButton>
                       <IconButton
                         edge="end"
                         size="small"
-                        onClick={() => onDeleteItem(item)}
+                        onClick={() => onDeleteItem(item.name)}
                         sx={{ color: 'text.secondary' }}
-                        aria-label={`Delete ${item}`}
+                        aria-label={`Delete ${item.name}`}
                       >
                         <DeleteOutlineRoundedIcon fontSize="small" />
                       </IconButton>
@@ -251,10 +275,14 @@ export function ManageOptionsModal({
                   }
                   sx={rowSx}
                 >
-                  <FolderOutlinedIcon fontSize="small" sx={{ color: 'primary.main', mr: 1.5 }} />
+                  <Inventory2OutlinedIcon fontSize="small" sx={{ color: 'primary.main', mr: 1.5 }} />
                   <ListItemText
-                    primary={item}
-                    slotProps={{ primary: { sx: { fontSize: '0.85rem', color: 'text.primary' } } }}
+                    primary={item.name}
+                    secondary={`${item.numberOfItems} items per box`}
+                    slotProps={{
+                      primary: { sx: { fontSize: '0.85rem', color: 'text.primary' } },
+                      secondary: { sx: { fontSize: '0.75rem', color: 'text.secondary' } },
+                    }}
                   />
                 </ListItem>
               );

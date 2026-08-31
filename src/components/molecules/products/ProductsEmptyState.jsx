@@ -4,7 +4,7 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import Inventory2RoundedIcon from '@mui/icons-material/Inventory2Rounded';
 
-export function ProductsEmptyState() {
+export function ProductsEmptyState({ onNewItem }) {
   return (
     <Box sx={{ px: 2 }}>
       <Stack sx={{ alignItems: 'center', textAlign: 'center' }}>
@@ -25,6 +25,7 @@ export function ProductsEmptyState() {
         <Button
           type="button"
           variant="contained"
+          onClick={onNewItem}
           sx={{ textTransform: 'none', mt: 3, borderRadius: 0.5, fontWeight: 400}}
         >
           New Item

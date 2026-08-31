@@ -6,7 +6,6 @@ import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import FieldError from '../../atoms/setupOrganisation/FieldError';
 
-import FormField from '../setupOrganisation/FormField';
 import { BrandSelectField } from './BrandSelectField';
 import { CategorySelectField } from './CategorySelectField';
 import { ManufacturerSelectField } from './ManufacturerSelectField';
@@ -31,7 +30,7 @@ ProductDetailsSection() {
         <Grid size={12}>
             <TextField
               id="product-name"
-              label="Product name"
+              label="Product name *"
               fullWidth
               placeholder="K-600 Cage"
               error={Boolean(errors.name)}
